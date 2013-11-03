@@ -277,9 +277,6 @@ public class Library {
 		}
 		return false;
 	}
-	
-	
-	
 
 	/*
 	 * Loads in data from books.txt
@@ -347,10 +344,12 @@ public class Library {
 		}
 	}
 	
+	
 	public ArrayList<Book> checkOut(int... bookNumbers) {
 		return books; 
 	}
 	
-} 
+}
 
 // hello taorui
+// hello kevin
