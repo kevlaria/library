@@ -1,7 +1,5 @@
 package library;
 
-// testing 1123
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -353,9 +351,3 @@ public class Library {
 	
 } 
 
-
-// hello kevin
-// hello taorui
-// hello taorui again
-// test 3wwefwe
-// test 4
