@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Scanner;
 
 public class Library {
 	
@@ -41,6 +42,8 @@ public class Library {
 		dummyLibrary.currentPatron.take(nightly);
 		dummyLibrary.printPatronBooks(dummyLibrary.currentPatron);
 		dummyLibrary.checkIn(1,2);
+		String input = dummyLibrary.closeMenuInput();
+		System.out.println(input);
 	}
 	
 	/*
@@ -64,15 +67,148 @@ public class Library {
 	/*
 	 * Library starter
 	 */
-	void start(){
-		// TO DO
+	public void start(){
+		String input = this.mainMenu();
+		// IO
+		// data validate IO
+	}
+	
+	
+	/**
+	 * Based on menu choice, inputs function
+	 * @param input
+	 */
+	public void implementMenuChoice(String input){
+		char letter = input.charAt(0);
+		switch(letter){
+			case 'o':
+				this.open();
+				break;
+			case 'q':
+				this.quit(); // not yet implemented
+				break;
+			case 'i':
+				this.issueCardMenu(); // not yet implemented
+				break;
+			case 's':
+				this.serveMenu(); // not yet implemented
+				break;
+			case 'a':
+				this.searchMenu(); // not yet implemented
+				break;
+			case 'c':
+				this.close();
+				break;
+			case 'n':
+				this.checkInMenu(); // not yet implemented
+				break;
+			case 't':
+				this.checkOutMenu(); // not yet implemented
+				break;
+			case 'r':
+				this.returnToMainMenu(); // not yet implemented
+				break;		
+		}
+	}
+	
+	/**
+	 * Prints the start menu for the user
+	 */
+	public String mainMenu(){
+//		this.println("\nWelcome! What would you like to do?");
+		if (!isOpen){		// Library is closed
+			String input = this.closedLibraryMenuInput();
+			return input;
+		}
+		else {
+			if (currentPatron == null){ // Library is open but no patron is being served
+				this.openMenuWithNoPatron();
+			} else { // Library is open and patron is being served
+			this.openMenuWithCurrentPatron(); // to be implemented
+			}
+		}
+	}
+	
+	/**
+	 * - Prints out menu list if library is closed
+	 * - Asks for user input
+	 * - Validates input
+	 * - Returns user input as a String
+	 * @return user input (String)
+	 */
+	public String closedLibraryMenuInput(){
+		String input = "";
+		boolean valid = false;
+		while (!valid){
+			this.println("\t1. Open for business\n\t2. Quit\n\t");
+			Scanner scanner = new Scanner(System.in);
+			while (scanner.hasNext()){
+				String unparsedText = scanner.next();
+				if (this.isValidInput(unparsedText, 2)){
+					if (unparsedText.equals("1")) {input = "o";}
+					else if (unparsedText.equals("2")) {input = "q";}
+					else {throw new RuntimeException("closeMenuInputError");}
+					valid = true;
+					return input;
+				}
+				else {
+					this.println(inputErrorMessage(unparsedText));
+				}
+			}
+		}
+		return input;
+	}
+	
+	/**
+	 * Validates input - ensures that a) input is a valid integer, b) it corresponds to one of the numbers on the menu
+	 * @param input
+	 * @param maxOptions - the number of options in the menu (assumes menu is comprised of consecutive positive numbers)
+	 * @return
+	 */
+	public boolean isValidInput(String input, int maxOptions){
+		if (!isInt(input)){
+			return false;
+		} else if (!isWithinRange(input, maxOptions)){
+			return false;
+		}
+		return true;
+	}
+	
+	
+	/**
+	 * Checks that input lies within the range of 1 to maxOptions (inclusive)
+	 * @param input - input number
+	 * @param max - max number
+	 * @return true if input lies within the range of 1 to maxOptions (inclusive) (boolean)
+	 */
+	public boolean isWithinRange(String input, int max){
+		int inputInt = Integer.parseInt(input);
+		if (inputInt < 1 || inputInt > max){
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * check if the input (outside of slash) is an integer
+	 * @param input - a user input string
+	 * @return true if input can be converted into an integer, else return false
+	 */
+	public boolean isInt(String input){
+		try{
+			Integer.parseInt(input);
+			return true;
+		}
+		catch(NumberFormatException e){
+			return false;
+		}			
 	}
 	
 	/*
 	 * Prints message only if okToPrint is set to true (using print)
 	 * @param message - the message that you want to print
 	 */
-	void print(String message){
+	public void print(String message){
 		if (this.okToPrint){
 			System.out.print(message);
 		}
@@ -82,7 +218,7 @@ public class Library {
 	 * Prints message only if okToPrint is set to true (using println)
 	 * @param message - the message that you want to print	 * 
 	 */
-	void println(String message){
+	public void println(String message){
 		if (this.okToPrint){
 			System.out.println(message);
 		}
@@ -95,7 +231,7 @@ public class Library {
 	 * - Sets an instance variable to indicate that the library is now open. 
 	 * Returns the list of notices that it got from calling createOverdueNotices.
 	 */
-	ArrayList<OverdueNotice> open(){
+	public ArrayList<OverdueNotice> open(){
 		this.calendar.advance();
 		isOpen = true;
 		this.println("\nLibrary is now open!");

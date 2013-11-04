@@ -526,4 +526,44 @@ public class LibraryTest {
         library.serve("Dave");
         library.checkIn(3);
     }
+    
+    /**
+     * Test method for isInt
+     */
+	@Test 
+	public void testisInt() {
+		assertTrue(library.isInt("3"));
+		assertTrue(library.isInt("-3"));
+		assertTrue(library.isInt("0"));
+		assertFalse(library.isInt("0.0"));
+		assertFalse(library.isInt("a"));
+		assertFalse(library.isInt("0a"));
+	}
+	
+    /**
+     * Test method for isValidInput
+     */	
+	@Test 
+	public void testisValidInput() {
+		assertTrue(library.isValidInput("3", 3));
+		assertTrue(library.isValidInput("1", 3));
+		assertFalse(library.isValidInput("3", 2));
+		assertFalse(library.isValidInput("0", 2));
+		assertFalse(library.isValidInput("z", 2));
+		assertFalse(library.isValidInput("-1", 2));
+	}
+	
+    /**
+     * Test method for testisWithinRange
+     */	
+	@Test 
+	public void testisWithinRange() {
+		assertTrue(library.isWithinRange("3", 3));
+		assertTrue(library.isWithinRange("1", 3));
+		assertFalse(library.isWithinRange("3", 2));
+		assertFalse(library.isWithinRange("0", 2));
+		assertFalse(library.isWithinRange("-1", 2));
+	}
+	
+	
 }
