@@ -34,12 +34,13 @@ public class Library {
 			dummyLibrary.print(exception.getMessage());
 		}
 		dummyLibrary.open();
-//		dummyLibrary.serve("Joe Blogs");
-//        Book witches = new Book("Witches Abroad", "Terry Pratchett");
-//        Book nightly = new Book("Disappearing Nightly", "Laura Resnick");
-//		dummyLibrary.currentPatron.take(witches);
-//		dummyLibrary.currentPatron.take(nightly);
-//		dummyLibrary.printPatronBooks(dummyLibrary.currentPatron);
+		dummyLibrary.serve("Joe Blogs");
+        Book witches = new Book("Witches Abroad", "Terry Pratchett");
+        Book nightly = new Book("Disappearing Nightly", "Laura Resnick");
+		dummyLibrary.currentPatron.take(witches);
+		dummyLibrary.currentPatron.take(nightly);
+		dummyLibrary.printPatronBooks(dummyLibrary.currentPatron);
+		dummyLibrary.checkIn(1,2);
 	}
 	
 	/*
@@ -202,6 +203,7 @@ public class Library {
 			}
 		}
 	}
+	
 	/**
 	 * The listed books are being returned by the current Patron (there must be one!), 
 	 * so return them to the collection and remove them from the list of books currently checked out to the patron. 
@@ -228,6 +230,7 @@ public class Library {
 					currentPatron.giveBack(returnBook);
 					returnBook.checkIn();
 					checkedInBooks.add(returnBook);
+					this.println("\nSuccessfully returned: " + returnBook.toString());
 				}
 				catch (IndexOutOfBoundsException exception){
 					throw new RuntimeException(this.inputErrorMessage(Integer.toString(bookNumber)));
