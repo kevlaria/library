@@ -23,27 +23,27 @@ public class Library {
 	
 	public static void main(String[] args){
 		Library dummyLibrary = new Library();
-		dummyLibrary.open();
-		try {
-		dummyLibrary.issueCard("Joe Blogs");
-		} catch (RuntimeException exception){
-			dummyLibrary.print(exception.getMessage());
-		};
-		try {
-			dummyLibrary.issueCard("Joe Blogs");
-		} catch (RuntimeException exception) {
-			dummyLibrary.print(exception.getMessage());
-		}
-		dummyLibrary.open();
-		dummyLibrary.serve("Joe Blogs");
-        Book witches = new Book("Witches Abroad", "Terry Pratchett");
-        Book nightly = new Book("Disappearing Nightly", "Laura Resnick");
-		dummyLibrary.currentPatron.take(witches);
-		dummyLibrary.currentPatron.take(nightly);
-		dummyLibrary.printPatronBooks(dummyLibrary.currentPatron);
-		dummyLibrary.checkIn(1,2);
-		String input = dummyLibrary.closeMenuInput();
-		System.out.println(input);
+//		dummyLibrary.open();
+//		try {
+//		dummyLibrary.issueCard("Joe Blogs");
+//		} catch (RuntimeException exception){
+//			dummyLibrary.print(exception.getMessage());
+//		};
+//		try {
+//			dummyLibrary.issueCard("Joe Blogs");
+//		} catch (RuntimeException exception) {
+//			dummyLibrary.print(exception.getMessage());
+//		}
+//		dummyLibrary.open();
+//		dummyLibrary.serve("Joe Blogs");
+//        Book witches = new Book("Witches Abroad", "Terry Pratchett");
+//        Book nightly = new Book("Disappearing Nightly", "Laura Resnick");
+//		dummyLibrary.currentPatron.take(witches);
+//		dummyLibrary.currentPatron.take(nightly);
+//		dummyLibrary.printPatronBooks(dummyLibrary.currentPatron);
+//		dummyLibrary.checkIn(1,2);
+//		dummyLibrary.close();
+		dummyLibrary.start();
 	}
 	
 	/*
@@ -68,9 +68,10 @@ public class Library {
 	 * Library starter
 	 */
 	public void start(){
-		String input = this.mainMenu();
-		// IO
-		// data validate IO
+//		while (true){
+			String input = this.mainMenu();
+			this.implementMenuChoice(input);
+//		}
 	}
 	
 	
@@ -85,28 +86,28 @@ public class Library {
 				this.open();
 				break;
 			case 'q':
-				this.quit(); // not yet implemented
+			//	this.quit(); // not yet implemented
 				break;
 			case 'i':
-				this.issueCardMenu(); // not yet implemented
+			//	this.issueCardMenu(); // not yet implemented
 				break;
 			case 's':
-				this.serveMenu(); // not yet implemented
+			//	this.serveMenu(); // not yet implemented
 				break;
 			case 'a':
-				this.searchMenu(); // not yet implemented
+			//	this.searchMenu(); // not yet implemented
 				break;
 			case 'c':
 				this.close();
 				break;
 			case 'n':
-				this.checkInMenu(); // not yet implemented
+			//	this.checkInMenu(); // not yet implemented
 				break;
 			case 't':
-				this.checkOutMenu(); // not yet implemented
+			//	this.checkOutMenu(); // not yet implemented
 				break;
 			case 'r':
-				this.returnToMainMenu(); // not yet implemented
+			//	this.returnToMainMenu(); // not yet implemented
 				break;		
 		}
 	}
@@ -115,18 +116,20 @@ public class Library {
 	 * Prints the start menu for the user
 	 */
 	public String mainMenu(){
-//		this.println("\nWelcome! What would you like to do?");
+		String input = "";
+		this.println("\nWelcome! What would you like to do?");
 		if (!isOpen){		// Library is closed
-			String input = this.closedLibraryMenuInput();
+			input = this.closedLibraryMenuInput();
 			return input;
 		}
 		else {
 			if (currentPatron == null){ // Library is open but no patron is being served
-				this.openMenuWithNoPatron();
+				// this.openMenuWithNoPatron();
 			} else { // Library is open and patron is being served
-			this.openMenuWithCurrentPatron(); // to be implemented
+			// this.openMenuWithCurrentPatron(); // to be implemented
 			}
 		}
+		return input;
 	}
 	
 	/**
@@ -140,7 +143,7 @@ public class Library {
 		String input = "";
 		boolean valid = false;
 		while (!valid){
-			this.println("\t1. Open for business\n\t2. Quit\n\t");
+			this.print("\t1. Open for business\n\t2. Quit\n\t");
 			Scanner scanner = new Scanner(System.in);
 			while (scanner.hasNext()){
 				String unparsedText = scanner.next();
