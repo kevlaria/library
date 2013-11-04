@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -232,7 +233,16 @@ public class Library {
 		return checkedInBooks;
 	}
 	
-	public 
+	/**
+	 * Reverse sorts a list of integers
+	 * @param intList - list of integers
+	 * @return list of integers sorted in reverse order (ArrayList<Integer>)
+	 */
+	public ArrayList<Integer> reverseSortList(ArrayList<Integer> intList){
+		Collections.sort(intList);
+		Collections.reverse(intList);
+		return intList;
+	}
 	
 	/**
 	 * Checks each patron to see if he/she has books due yesterday

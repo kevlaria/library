@@ -460,8 +460,19 @@ public class LibraryTest {
      */
     @Test
     public void testinputErrorMessage(){
-    	assertEquals("'#$' is not a valid input. Please re-enter.", library.inputErrorMessage("#$"));
-    	
+    	assertEquals("'#$' is not a valid input. Please re-enter.", library.inputErrorMessage("#$"));	
+    }
+    
+    /*
+     * Test method for inputErrorMessage()
+     */
+    @Test
+    public void testreverseSortList(){
+    	ArrayList<Integer> intList = new ArrayList<Integer>();
+    	intList.add(3);
+    	intList.add(5);
+    	intList.add(1);
+    	assertEquals("5, 3, 1", library.reverseSortList(intList).toString());	
     }
     
 }
