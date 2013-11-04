@@ -28,4 +28,29 @@ public class OverdueNotice {
 		}
 	    return notice;
 	}
+
+
+	/*
+	 * For unit tests
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		OverdueNotice other = (OverdueNotice) obj;
+		if (patron == null) {
+			if (other.patron != null)
+				return false;
+		} else if (!patron.equals(other.patron))
+			return false;
+		if (todaysDate != other.todaysDate)
+			return false;
+		return true;
+	}
+	
+	
 }

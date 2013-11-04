@@ -25,4 +25,23 @@ public class Calendar {
 	public void advance(){
 		this.date = this.date + 1;
 	}
+
+	/*
+	 * For unit tests
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Calendar other = (Calendar) obj;
+		if (date != other.date)
+			return false;
+		return true;
+	}
+	
+	
 }

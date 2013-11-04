@@ -59,7 +59,9 @@ public class Patron {
 		return getName();
 	}
 
-
+	/*
+	 * For unit tests
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
