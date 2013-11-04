@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -204,6 +205,8 @@ public class Library {
 	/**
 	 * The listed books are being returned by the current Patron (there must be one!), 
 	 * so return them to the collection and remove them from the list of books currently checked out to the patron. 
+	 * Also resets dueDate to -1
+	 * Assumes that there are no repeated integers / invalid integers (error checked prior to this method call)
 	 * @param bookNumbers
 	 * @return
 	 */
@@ -217,12 +220,13 @@ public class Library {
 		}
 		else {
 			ArrayList<Book> patronBooks = currentPatron.getBooks();
+			bookNumbers = this.bookNumbersToIndex(bookNumbers);
+			bookNumbers = this.reverseSortList(bookNumbers);
 			for (int bookNumber : bookNumbers){	
 				try {
 					Book returnBook = patronBooks.get(bookNumber);		
-					if (returnBook == null){
-						throw new RuntimeException("You've already returned that book.");
-					}
+					currentPatron.giveBack(returnBook);
+					returnBook.checkIn();
 					checkedInBooks.add(returnBook);
 				}
 				catch (IndexOutOfBoundsException exception){
@@ -234,14 +238,36 @@ public class Library {
 	}
 	
 	/**
-	 * Reverse sorts a list of integers
-	 * @param intList - list of integers
-	 * @return list of integers sorted in reverse order (ArrayList<Integer>)
+	 * Takes an array of integer inputs, and converts them into an array of index numbers
+	 * (by subtracting 1)
+	 * @param intList
+	 * @return array of index numbers (int[])
 	 */
-	public ArrayList<Integer> reverseSortList(ArrayList<Integer> intList){
-		Collections.sort(intList);
-		Collections.reverse(intList);
+	public int[] bookNumbersToIndex(int[] intList){
+		int intListLength = intList.length;
+		for (int i = 0; i < intListLength; i ++){
+			int temp = intList[i];
+			temp = temp - 1;
+			intList[i] = temp;
+		}
 		return intList;
+	}
+	
+	
+	
+	/**
+	 * Reverse sorts an Array of integers
+	 * @param intList - Array of integer
+	 * @return list of integers sorted in reverse order (int[])
+	 */
+	public int[] reverseSortList(int[] intList){
+		Arrays.sort(intList);
+		int intListLength = intList.length;
+		int[] reverseList = new int[intListLength];
+		for (int i = 0; i < intListLength; i++){
+			reverseList[intListLength - 1 -i] = intList[i];
+		}	
+		return reverseList;
 	}
 	
 	/**

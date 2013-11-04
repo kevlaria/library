@@ -462,17 +462,68 @@ public class LibraryTest {
     public void testinputErrorMessage(){
     	assertEquals("'#$' is not a valid input. Please re-enter.", library.inputErrorMessage("#$"));	
     }
+  
+    /*
+     * Test method for bookNumbersToIndex()
+     */
+    @Test
+    public void testbookNumbersToIndex(){
+    	int[] intList = {3, 5, 1};
+    	int[] newintList = library.bookNumbersToIndex(intList);
+    	assertEquals(2, newintList[0]);	
+    	assertEquals(4, newintList[1]);	
+    	assertEquals(0, newintList[2]);	
+    }
     
     /*
-     * Test method for inputErrorMessage()
+     * Test method for reverseSortList()
      */
     @Test
     public void testreverseSortList(){
-    	ArrayList<Integer> intList = new ArrayList<Integer>();
-    	intList.add(3);
-    	intList.add(5);
-    	intList.add(1);
-    	assertEquals("5, 3, 1", library.reverseSortList(intList).toString());	
+    	int[] intList = {3, 5, 1};
+    	assertEquals(5, library.reverseSortList(intList)[0]);	
+    	assertEquals(3, library.reverseSortList(intList)[1]);	
+    	assertEquals(1, library.reverseSortList(intList)[2]);	
     }
     
+    /*
+     * Test method for checkIn()
+     */
+    @Test
+    public void testcheckIn(){
+    	library.open();
+        Patron dave = library.issueCard("Dave");
+        dave.take(contact);
+        dave.take(contact2);
+        library.serve("Dave");
+        ArrayList<Book> returnedBooks = new ArrayList<Book>();
+        returnedBooks.add(contact);
+        returnedBooks.add(contact2);
+        assertEquals(returnedBooks, library.checkIn(1, 2));
+        
+    }
+    
+    /**
+     * Test method for checkIn (when patron doesn't have any books)
+     */
+    @Test(expected=RuntimeException.class)
+    public void testcheckInWhenPatronHasNoBooks() {
+    	library.open();
+        Patron dave = library.issueCard("Dave");
+        library.serve("Dave");
+        library.checkIn(1);
+    }
+    
+    /**
+     * Test method for checkIn (when input is out of range)
+     */
+    @Test(expected=RuntimeException.class)
+    public void testcheckInWhenInputIsOutOfRange() {
+    	library.open();
+        Patron dave = library.issueCard("Dave");
+        dave.take(contact);
+        dave.take(contact2);
+        library.serve("Dave");
+        library.checkIn(3);
+    }
 }
