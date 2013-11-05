@@ -224,6 +224,7 @@ public class LibraryTest {
      */
     @Test(expected=RuntimeException.class)
     public void testCheckOutBookFromYesterdaysSearch() {
+    	Patron dave = openAndServeDave();
         library.open();
         library.search("Time");
         library.close();
@@ -264,9 +265,11 @@ public class LibraryTest {
      */
     @Test(expected=RuntimeException.class)
     public void testCheckOutTooManyBooks() {
+    	Patron dave = openAndServeDave();
         openAndGiveBooksToDave();
         library.search("Time");
         library.checkOut(1);
+        
     }
 
     /**
@@ -438,11 +441,11 @@ public class LibraryTest {
      */
     @Test
     public void testcreateSinglePatronOverdueNotice(){
-    	Patron bob = new Patron("Bob", library);
-    	bob.take(contact);
-    	OverdueNotice notice = library.createSinglePatronOverdueNotice(bob);
-    	System.out.println(notice);
-		fail("Not yet implemented");
+            Patron bob = new Patron("Bob", library);
+            bob.take(contact);
+            OverdueNotice notice = library.createSinglePatronOverdueNotice(bob);
+            System.out.println(notice);
+                fail("Not yet implemented");
     }
     
     /*
@@ -450,9 +453,9 @@ public class LibraryTest {
      */
     @Test
     public void testisOverdue(){
-    	assertFalse(library.isOverdue(contact, 0));
-    	assertTrue(library.isOverdue(contact, -1));
-    	
+            assertFalse(library.isOverdue(contact, 0));
+            assertTrue(library.isOverdue(contact, -1));
+            
     }
     
     /*
@@ -460,7 +463,7 @@ public class LibraryTest {
      */
     @Test
     public void testinputErrorMessage(){
-    	assertEquals("'#$' is not a valid input. Please re-enter.", library.inputErrorMessage("#$"));	
+            assertEquals("'#$' is not a valid input. Please re-enter.", library.inputErrorMessage("#$"));        
     }
   
     /*
@@ -468,11 +471,11 @@ public class LibraryTest {
      */
     @Test
     public void testbookNumbersToIndex(){
-    	int[] intList = {3, 5, 1};
-    	int[] newintList = library.bookNumbersToIndex(intList);
-    	assertEquals(2, newintList[0]);	
-    	assertEquals(4, newintList[1]);	
-    	assertEquals(0, newintList[2]);	
+            int[] intList = {3, 5, 1};
+            int[] newintList = library.bookNumbersToIndex(intList);
+            assertEquals(2, newintList[0]);        
+            assertEquals(4, newintList[1]);        
+            assertEquals(0, newintList[2]);        
     }
     
     /*
@@ -480,10 +483,10 @@ public class LibraryTest {
      */
     @Test
     public void testreverseSortList(){
-    	int[] intList = {3, 5, 1};
-    	assertEquals(5, library.reverseSortList(intList)[0]);	
-    	assertEquals(3, library.reverseSortList(intList)[1]);	
-    	assertEquals(1, library.reverseSortList(intList)[2]);	
+            int[] intList = {3, 5, 1};
+            assertEquals(5, library.reverseSortList(intList)[0]);        
+            assertEquals(3, library.reverseSortList(intList)[1]);        
+            assertEquals(1, library.reverseSortList(intList)[2]);        
     }
     
     /*
@@ -491,7 +494,7 @@ public class LibraryTest {
      */
     @Test
     public void testcheckIn(){
-    	library.open();
+        library.open();
         Patron dave = library.issueCard("Dave");
         dave.take(contact);
         dave.take(contact2);
@@ -508,7 +511,7 @@ public class LibraryTest {
      */
     @Test(expected=RuntimeException.class)
     public void testcheckInWhenPatronHasNoBooks() {
-    	library.open();
+            library.open();
         Patron dave = library.issueCard("Dave");
         library.serve("Dave");
         library.checkIn(1);
@@ -519,7 +522,7 @@ public class LibraryTest {
      */
     @Test(expected=RuntimeException.class)
     public void testcheckInWhenInputIsOutOfRange() {
-    	library.open();
+            library.open();
         Patron dave = library.issueCard("Dave");
         dave.take(contact);
         dave.take(contact2);
@@ -530,40 +533,59 @@ public class LibraryTest {
     /**
      * Test method for isInt
      */
-	@Test 
-	public void testisInt() {
-		assertTrue(library.isInt("3"));
-		assertTrue(library.isInt("-3"));
-		assertTrue(library.isInt("0"));
-		assertFalse(library.isInt("0.0"));
-		assertFalse(library.isInt("a"));
-		assertFalse(library.isInt("0a"));
-	}
-	
+        @Test 
+        public void testisInt() {
+                assertTrue(library.isInt("3"));
+                assertTrue(library.isInt("-3"));
+                assertTrue(library.isInt("0"));
+                assertFalse(library.isInt("0.0"));
+                assertFalse(library.isInt("a"));
+                assertFalse(library.isInt("0a"));
+        }
+        
     /**
      * Test method for isValidInput
-     */	
-	@Test 
-	public void testisValidInput() {
-		assertTrue(library.isValidInput("3", 3));
-		assertTrue(library.isValidInput("1", 3));
-		assertFalse(library.isValidInput("3", 2));
-		assertFalse(library.isValidInput("0", 2));
-		assertFalse(library.isValidInput("z", 2));
-		assertFalse(library.isValidInput("-1", 2));
-	}
-	
+     */        
+        @Test 
+        public void testisValidInput() {
+                assertTrue(library.isValidInput("3", 3));
+                assertTrue(library.isValidInput("1", 3));
+                assertFalse(library.isValidInput("3", 2));
+                assertFalse(library.isValidInput("0", 2));
+                assertFalse(library.isValidInput("z", 2));
+                assertFalse(library.isValidInput("-1", 2));
+        }
+        
     /**
      * Test method for testisWithinRange
-     */	
-	@Test 
-	public void testisWithinRange() {
-		assertTrue(library.isWithinRange("3", 3));
-		assertTrue(library.isWithinRange("1", 3));
-		assertFalse(library.isWithinRange("3", 2));
-		assertFalse(library.isWithinRange("0", 2));
-		assertFalse(library.isWithinRange("-1", 2));
-	}
-	
-	
+     */        
+        @Test 
+        public void testisWithinRange() {
+                assertTrue(library.isWithinRange("3", 3));
+                assertTrue(library.isWithinRange("1", 3));
+                assertFalse(library.isWithinRange("3", 2));
+                assertFalse(library.isWithinRange("0", 2));
+                assertFalse(library.isWithinRange("-1", 2));
+        }
+        
+     /**
+      * Test method for parseToInt
+      */
+        @Test
+        public void testParseToInt() {
+        	assertEquals(1, library.parseToInt("1,2,3")[0]);
+        	assertEquals(2, library.parseToInt("2")[0]);
+        	assertEquals(2, library.parseToInt(" 2 ")[0]);
+        }
+     /**
+      * Test method for checkoutInputValid
+      */
+        @Test
+        public void testCheckoutInputValid() {
+        	assertTrue(library.checkoutInputValid("2,3,1"));
+        	assertTrue(library.checkoutInputValid("2"));
+        	assertTrue(library.checkoutInputValid("2,3,"));
+        	assertTrue(library.checkoutInputValid(" 2,3 "));
+        	
+        }
 }
