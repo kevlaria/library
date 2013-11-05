@@ -273,6 +273,7 @@ public class Library {
                         this.println("\n Library is now closed! Good night!");
                         this.isOpen = false;
                         this.currentPatron = null;
+                        this.searchedBooks = null;
                 }
         }
         
