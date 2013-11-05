@@ -23,28 +23,34 @@ public class Library {
         private HashMap<Integer, Book> searchedBooks;
         
         public static void main(String[] args){
-                Library dummyLibrary = new Library();
-                dummyLibrary.open();
-                try {
-                dummyLibrary.issueCard("Joe Blogs");
-                } catch (RuntimeException exception){
-                        dummyLibrary.print(exception.getMessage());
-                };
-                try {
-                        dummyLibrary.issueCard("Joe Blogs");
-                } catch (RuntimeException exception) {
-                        dummyLibrary.print(exception.getMessage());
-                }
-                dummyLibrary.open();
-                dummyLibrary.serve("Joe Blogs");
-        Book witches = new Book("Witches Abroad", "Terry Pratchett");
-        Book nightly = new Book("Disappearing Nightly", "Laura Resnick");
-                dummyLibrary.currentPatron.take(witches);
-                dummyLibrary.currentPatron.take(nightly);
-                dummyLibrary.printPatronBooks(dummyLibrary.currentPatron);
-                dummyLibrary.checkIn(1,2);
-                dummyLibrary.close();
-                dummyLibrary.start();
+        	Library test1 = new Library();
+        	test1.open();
+        	Patron a = test1.issueCard("a");
+        	test1.serve("a");
+        	test1.searchMenu();
+        	test1.checkOutMenu();
+//                Library dummyLibrary = new Library();
+//                dummyLibrary.open();
+//                try {
+//                dummyLibrary.issueCard("Joe Blogs");
+//                } catch (RuntimeException exception){
+//                        dummyLibrary.print(exception.getMessage());
+//                };
+//                try {
+//                        dummyLibrary.issueCard("Joe Blogs");
+//                } catch (RuntimeException exception) {
+//                        dummyLibrary.print(exception.getMessage());
+//                }
+//                dummyLibrary.open();
+//                dummyLibrary.serve("Joe Blogs");
+//        Book witches = new Book("Witches Abroad", "Terry Pratchett");
+//        Book nightly = new Book("Disappearing Nightly", "Laura Resnick");
+//                dummyLibrary.currentPatron.take(witches);
+//                dummyLibrary.currentPatron.take(nightly);
+//                dummyLibrary.printPatronBooks(dummyLibrary.currentPatron);
+//                dummyLibrary.checkIn(1,2);
+//                dummyLibrary.close();
+//                dummyLibrary.start();
         }
         
         /*
@@ -397,8 +403,6 @@ public class Library {
                 return intList;
         }
         
-        
-        
         /**
          * Reverse sorts an Array of integers
          * @param intList - Array of integer
@@ -549,29 +553,7 @@ public class Library {
          * implement the menu of search.
          */
         public void searchMenu() {
-        	this.search(this.searchInput());
-        	String input = "";
-            Boolean valid = true;
-            while(valid) {
-        	    this.println("You can: 1. enter c to checkout books.");
-        	    this.println("         2. enter r to search books.");
-        	    Scanner scanner = new Scanner(System.in);
-        	    input = scanner.next().trim();
-        	    if (input.equals("c") || input.equals("C") ||
-        	        input.equals("r") || input.equals("R")) {
-        	    	valid = false;
-        	    }
-        	    else {
-        	    	this.println(inputErrorMessage(input));
-        	    }
-            }
-            if (input.equals("c") || input.equals("C")) {
-            	this.checkOutMenu();
-            }
-            else{
-            	this.searchMenu();
-        	}
-        	
+        	this.search(this.searchInput());        	
         }
  
         /**
@@ -610,8 +592,9 @@ public class Library {
             		        this.println("successfully checked out the book: " + checkedBook.toString());
             			}
             	    }
-            	    catch (IndexOutOfBoundsException exception){
-                        throw new RuntimeException(this.inputErrorMessage(Integer.toString(bookNumber)));
+            	    catch (NullPointerException exception){
+                       this.println(this.inputErrorMessage(Integer.toString(bookNumber)));
+                       //this.checkOutMenu();
             	    }
             	}
             }
@@ -628,8 +611,8 @@ public class Library {
         	String input = "";
         	Boolean valid = true;
         	while (valid) {
-                this.print("Please choose which book or books you want to check out according to the searching result.");
-                this.print("To choose mutiple books at one time, please enter indexes split by the comma.");
+                this.println("Please choose which book or books you want to check out according to the searching result.");
+                this.println("To choose mutiple books at one time, please enter indexes split by the comma.");
                 Scanner scanner = new Scanner(System.in);
                 input = scanner.next();
                 if (checkoutInputValid(input)) {
@@ -646,29 +629,7 @@ public class Library {
          * implement the menu of check out.
          */
         public void checkOutMenu() {
-        	this.checkOut(this.checkoutInput());
-        	String input = "";
-            Boolean valid = true;
-            while(valid) {
-        	    this.println("You can: 1. enter c to checkout books.");
-        	    this.println("         2. enter r to search books.");
-        	    Scanner scanner = new Scanner(System.in);
-        	    input = scanner.next().trim();
-        	    if (input.equals("c") || input.equals("C") ||
-        	        input.equals("r") || input.equals("R")) {
-        	    	valid = false;
-        	    }
-        	    else {
-        	    	this.println(inputErrorMessage(input));
-        	    }
-            }
-            if (input.equals("c") || input.equals("C")) {
-            	this.checkOutMenu();
-            }
-            else{
-            	this.searchMenu();
-        	}
-        	
+        	this.checkOut(this.checkoutInput());        	
         }
         
         /**
@@ -681,10 +642,10 @@ public class Library {
         	int[] tempInt = new int[tempStr.length];
         	int i = 0;
         	for (String temp: tempStr) {
-        		tempInt[i] = Integer.parseInt(temp);
+        		// if throws NumberFormatException, it will be catched in checkoutInputValid().
+        		tempInt[i] = Integer.parseInt(temp); 
         		i++;
-        	}
-        	System.out.println(tempInt[0]);
+        	}        	
         	return tempInt;
         }
         
@@ -704,5 +665,5 @@ public class Library {
         }
         
 
-        // test1
+
 } 
