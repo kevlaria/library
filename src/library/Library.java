@@ -25,10 +25,12 @@ public class Library {
         public static void main(String[] args){
         	Library test1 = new Library();
         	test1.open();
+        	
         	Patron a = test1.issueCard("a");
         	test1.serve("a");
-        	test1.searchMenu();
-        	test1.checkOutMenu();
+        	test1.start();
+//        	test1.searchMenu();
+//        	test1.checkOutMenu();
 //                Library dummyLibrary = new Library();
 //                dummyLibrary.open();
 //                try {
@@ -76,10 +78,10 @@ public class Library {
          * Library starter
          */
         public void start(){
-//                while (true){
+                while (true){
                         String input = this.mainMenu();
                         this.implementMenuChoice(input);
-//                }
+                }
         }
         
         
@@ -132,13 +134,103 @@ public class Library {
                 }
                 else {
                         if (currentPatron == null){ // Library is open but no patron is being served
-                                // this.openMenuWithNoPatron();
+                             input = this.openMenuWithNoPatron();
                         } else { // Library is open and patron is being served
-                        // this.openMenuWithCurrentPatron(); // to be implemented
+                             input = this.openMenuWithCurrentPatron(); 
                         }
                 }
+                
                 return input;
         }
+        
+        /**
+         * - Prints out menu list if library is open but with no patron.
+         * - Asks for user input
+         * - Validates input
+         * - Returns user input as a String
+         * @return user input (String)
+         */
+        public String openMenuWithNoPatron() {
+        	String input = "";
+        	boolean valid = true;
+        	while (valid) {
+        		this.println("1. Issue card.");
+        		this.println("2. Serve patron.");
+        		this.println("3. Close library.");
+        		this.println("4. Quit.");
+        		Scanner scanner = new Scanner(System.in);
+        		input = scanner.next().trim();
+        		if (input.equals("1") || input.equals("2") || 
+        		    input.equals("3") || input.equals("4")) {
+        			valid = false;
+        		}
+        		else {
+        			this.println(inputErrorMessage(input));
+        		}
+        	}
+        	if (input.equals("1")) {
+        		return "i";
+        	}
+        	else if (input.equals("2")) {
+        		return "s";
+        	}
+        	else if (input.equals("3")) {
+        		return "c";
+        	}
+        	else {
+        		return "q";
+        	}
+        }
+        
+        /**
+         * - Prints out menu list if library is open but with no patron.
+         * - Asks for user input
+         * - Validates input
+         * - Returns user input as a String
+         * @return user input (String)
+         */
+        public String openMenuWithCurrentPatron() {
+        	String input = "";
+        	boolean valid = true;
+        	while (valid) {
+        		this.println("1. Issue card.");
+        		this.println("2. Serve patron.");
+        		this.println("3. Check in books.");
+        		this.println("4. Search books.");
+        		this.println("5. Close library.");
+        		this.println("6. Quit.");
+        		Scanner scanner = new Scanner(System.in);
+        		input = scanner.next().trim();
+        		if (input.equals("1") || input.equals("2") || 
+        		    input.equals("3") || input.equals("4") ||
+        		    input.equals("5") || input.equals("6")) {
+        			valid = false;
+        		}
+        		else {
+        			this.println(inputErrorMessage(input));
+        		}
+        	}
+        	if (input.equals("1")) {
+        		return "i";
+        	}
+        	else if (input.equals("2")) {
+        		return "s";
+        	}
+        	else if (input.equals("3")) {
+        		return "n";
+        	}
+        	else if (input.equals("4")) {
+        		return "a";
+        	}
+        	else if (input.equals("5")) {
+        		return "c";
+        	}
+        	else {
+        		return "q";
+        	}
+        }
+        
+       
         
         /**
          * - Prints out menu list if library is closed
@@ -554,7 +646,25 @@ public class Library {
          * implement the menu of search.
          */
         public void searchMenu() {
-        	this.search(this.searchInput());        	
+        	this.search(this.searchInput());
+        	String input = "";
+        	boolean valid = false;
+        	while(!valid) {
+        		this.println("You can: 1. Check out books.");
+        		this.println("         2. Go back to previous page.");
+        		this.println("type 1 or 2 to choose");
+        		Scanner scanner = new Scanner(System.in);
+                input = scanner.next().trim();
+                if (input.equals("1") || input.equals("2")) {
+                	valid = true;
+                }
+                else {
+                	this.println(inputErrorMessage(input));
+                }
+        	}
+        	if (input.equals("1")) {
+        		this.checkOutMenu();
+        	}
         }
  
         /**
@@ -595,7 +705,7 @@ public class Library {
             	    }
             	    catch (NullPointerException exception){
                        this.println(this.inputErrorMessage(Integer.toString(bookNumber)));
-                       //this.checkOutMenu();
+                       this.checkOutMenu();
             	    }
             	}
             }
@@ -630,6 +740,10 @@ public class Library {
          * implement the menu of check out.
          */
         public void checkOutMenu() {
+        	boolean valid = false;
+        	while (!valid) {
+        		int[] temp = this.checkoutInput();
+        	}
         	this.checkOut(this.checkoutInput());        	
         }
         
@@ -658,12 +772,15 @@ public class Library {
         public boolean checkoutInputValid(String input) {
         	try {
         		this.parseToInt(input);
-        		return true;
+        		
+        		
         	}
         	catch(NumberFormatException e) {
         		return false;
         	}
         }
+        
+        
         
 
 
