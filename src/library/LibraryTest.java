@@ -588,4 +588,16 @@ public class LibraryTest {
         	assertTrue(library.checkoutInputValid(" 2,3 "));
         	
         }
+        
+        /*
+         * unit tests for toCapitalise
+         */
+        @Test
+        public void testtoCapitalise(){
+        	assertEquals("Robert", library.toCapitalise("robert"));
+        	assertEquals("Robert", library.toCapitalise("ROBERT"));
+        	assertEquals("Robert", library.toCapitalise("Robert"));
+        	assertEquals("R", library.toCapitalise("r"));
+        	assertEquals("Jo", library.toCapitalise("jo"));
+        }
 }

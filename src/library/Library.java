@@ -24,11 +24,11 @@ public class Library {
         
         public static void main(String[] args){
         	Library test1 = new Library();
-        	test1.open();
-        	
-        	Patron a = test1.issueCard("a");
-        	test1.serve("a");
         	test1.start();
+        	
+//        	Patron a = test1.issueCard("a");
+//        	test1.serve("a");
+//        	test1.start();
 //        	test1.searchMenu();
 //        	test1.checkOutMenu();
 //                Library dummyLibrary = new Library();
@@ -99,10 +99,10 @@ public class Library {
                         //        this.quit(); // not yet implemented
                                 break;
                         case 'i':
-                        //        this.issueCardMenu(); // not yet implemented
+                                this.patronInteractionMenu("issueCard");
                                 break;
                         case 's':
-                        //        this.serveMenu(); // not yet implemented
+                                this.patronInteractionMenu("serve"); 
                                 break;
                         case 'a':
                                 this.searchMenu(); 
@@ -129,19 +129,23 @@ public class Library {
                 String input = "";
                 this.println("\nWelcome! What would you like to do?");
                 if (!isOpen){                // Library is closed
+                		this.println("(The library is currently closed.)");
                         input = this.closedLibraryMenuInput();
                         return input;
                 }
                 else {
-                        if (currentPatron == null){ // Library is open but no patron is being served
-                             input = this.openMenuWithNoPatron();
+                        if (this.currentPatron == null){ // Library is open but no patron is being served
+                        	this.println("(The library is open, but is not serving anyone.)");
+                            input = this.openMenuWithNoPatron();
                         } else { // Library is open and patron is being served
-                             input = this.openMenuWithCurrentPatron(); 
+                        	this.println("(The library is open, and is currently serving " + this.currentPatron.getName() + ".)");
+                            input = this.openMenuWithCurrentPatron(); 
                         }
                 }
                 
                 return input;
         }
+        
         
         /**
          * - Prints out menu list if library is open but with no patron.
@@ -378,6 +382,43 @@ public class Library {
                 return ("'" + input + "' is not a valid input. Please re-enter.");
         }
         
+        /**
+         * Prompts user to input name of patron. Used for:
+         * - issueCard (String function = "issueCard")
+         * - serve (String function = "serve")
+         * @param the function that you want to execute
+         */
+        public void patronInteractionMenu(String function){
+        	this.println("Please enter the name of your patron (enter 'q' to return to main menu): ");
+        	Scanner scanner = new Scanner(System.in);
+        	boolean valid = false;
+        	while (!valid){
+               	String input = scanner.next().trim();
+          		input = this.toCapitalise(input);
+            	if (input.equals("Q")){
+            			return; // returns to main menu
+            	} else if (function.equals("issueCard")) {
+            		try {
+                		this.issueCard(input);
+            			valid = true;
+            		}	
+            		catch (RuntimeException exception){            		
+            			this.println(exception.getMessage());
+                	}		
+            	} else if (function.equals("serve")){
+            		try {
+            			this.serve(input);
+            			valid = true;
+            		}
+            		catch (RuntimeException exception){
+            			this.println(exception.getMessage());
+            			valid = true; // returns to main menu if input hasn't been issued a card
+            		}
+            	}
+        	}
+        }
+        
+        
         /*
          * Issues a library card to the person with the name. NB no two people can have the same name
          * @param - name of person
@@ -418,7 +459,8 @@ public class Library {
                                 currentPatron = servedPatron; // set instance variable currentPatron to servedPatron
                         }
                         else{
-                                throw new RuntimeException("Sorry, " + nameOfPatron + "hasn't been issued a card at this library. Please issue card first and try again.");
+                                throw new RuntimeException("Sorry, " + nameOfPatron + " hasn't been issued a card at this library. "
+                                		+ "Please issue " + nameOfPatron + " a card first and try again.");
                         }
                 } else {
                         throw new RuntimeException(closedLibraryMessage);
@@ -441,7 +483,18 @@ public class Library {
                                 this.println(Integer.toString(itemNumber) + ": " + book.toString());
                                 itemNumber ++;
                         }
+                } else {
+                	this.println(patron.getName() + " has not borrowed any books.");
                 }
+        }
+        
+        public void checkInMenu(){
+        	if (this.currentPatron.getBooks().isEmpty()){
+        		this.println(this.currentPatron.getName() + " has not borrowed any books.");
+        		return;
+        	}
+        	// to do - implement IO
+        	// parse input
         }
         
         /**
@@ -478,6 +531,22 @@ public class Library {
                         }
                 }
                 return checkedInBooks;
+        }
+        
+        
+        public String toCapitalise(String input){
+        	String newString = "";
+        	if (input.equals("")){
+        		throw new RuntimeException(this.inputErrorMessage(input));
+        	} else if (input.length() == 1){
+        		newString = input.toUpperCase();
+        		return newString;
+        	} else {
+            	input = input.toLowerCase();
+            	Character firstLetter = input.charAt(0);
+            	newString = firstLetter.toString().toUpperCase() + input.substring(1);
+            	return newString; 		
+        	}
         }
         
         /**
