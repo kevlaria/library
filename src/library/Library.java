@@ -879,7 +879,6 @@ public class Library {
         public boolean checkInOutInputValid(String input, int numBooks, String function) {
         	try {
         		int[] inputIntegers = this.parseToInt(input);
-        		System.out.println(1);
         		if (!this.isWithinRange(inputIntegers, numBooks)){
 	        			throw new RuntimeException("Input includes number not in list.");
         		}
@@ -899,8 +898,6 @@ public class Library {
         
         public boolean isFewerThanThreeBooks(int[] input) {
         	if ((input.length + currentPatron.getBooks().size()) > 3) {
-        		System.out.println(input.length + "length");
-        		System.out.println(currentPatron.getBooks());
         		return true;
         	}
         	else {
