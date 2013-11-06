@@ -165,7 +165,7 @@ public class Library {
         		this.println("5. Quit.");
         		this.print("Please enter 1, 2, 3, 4 or 5: ");
         		Scanner scanner = new Scanner(System.in);
-        		input = scanner.next().trim();
+        		input = scanner.nextLine().trim();
         		if (input.equals("1") || input.equals("2") || 
         		    input.equals("3") || input.equals("4") || input.equals("5")) {
         			valid = false;
@@ -210,7 +210,7 @@ public class Library {
         		this.println("6. Quit.");        		
         		this.print("Please enter 1, 2, 3, 4, 5 or 6: ");
         		Scanner scanner = new Scanner(System.in);
-        		input = scanner.next().trim();
+        		input = scanner.nextline().trim();
         		if (input.equals("1") || input.equals("2") || 
         		    input.equals("3") || input.equals("4") ||
         		    input.equals("5") || input.equals("6")) {
@@ -396,7 +396,7 @@ public class Library {
         	Scanner scanner = new Scanner(System.in);
         	boolean valid = false;
         	while (!valid){
-               	String input = scanner.next().trim();
+               	String input = scanner.nextLine().trim();
           		input = this.toCapitalise(input);
             	if (input.equals("R")){
             			return; // returns to main menu
@@ -698,7 +698,7 @@ public class Library {
         	String input = "";
             this.print("Please enter your search term (author name or book title, must be at least 4 characters long).");
             Scanner scanner = new Scanner(System.in);
-            input = scanner.next().trim();
+            input = scanner.nextLine().trim();
             if (input.length() < 4) {
             	this.println("The search term should be at least 4 characters long.");
             	return searchInput();
@@ -721,7 +721,7 @@ public class Library {
         				this.println("         2. Go back to previous page.");
         				this.print("Please enter 1 or 2: ");
         				Scanner scanner = new Scanner(System.in);
-        				input = scanner.next().trim();
+        				input = scanner.nextLine().trim();
         				if (input.equals("1") || input.equals("2")) {
         					valid = true;
         				}
@@ -734,7 +734,7 @@ public class Library {
         			while(!valid) {        			
         				this.print("Please enter 'r' to go back to the main menu.");
         				Scanner scanner = new Scanner(System.in);
-        				input = scanner.next().trim();
+        				input = scanner.nextline().trim();
         				if (input.equals("r") || input.equals("R")) {
         					valid = true;
         				}
