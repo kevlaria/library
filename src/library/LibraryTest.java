@@ -543,18 +543,7 @@ public class LibraryTest {
                 assertFalse(library.isInt("0a"));
         }
         
-//    /**
-//     * Test method for isValidInput
-//     */        
-//        @Test 
-//        public void testisValidInput() {
-//                assertTrue(library.isValidInput("3", 3));
-//                assertTrue(library.isValidInput("1", 3));
-//                assertFalse(library.isValidInput("3", 2));
-//                assertFalse(library.isValidInput("0", 2));
-//                assertFalse(library.isValidInput("z", 2));
-//                assertFalse(library.isValidInput("-1", 2));
-//        }
+
         
     /**
      * Test method for testisWithinRange
@@ -584,8 +573,9 @@ public class LibraryTest {
         	assertEquals(3, library.parseToInt("1,2,3")[2]);
         	assertEquals(2, library.parseToInt("2")[0]);
         	assertEquals(2, library.parseToInt(" 2 ")[0]);
-        	assertEquals(1, library.parseToInt("1,2, 4, 1")[0]);
-        	assertEquals(2, library.parseToInt("1,2, 4, 1")[1]);
+        	assertEquals(1, library.parseToInt("1, 2, 4, 1")[0]);
+        	assertEquals(2, library.parseToInt("1, 2, 4, 1")[1]);
+        	assertEquals(4, library.parseToInt("1,2, 4, 1")[2]);
         	assertEquals(1, library.parseToInt("1,2, 4, 1")[3]);
         }
         
