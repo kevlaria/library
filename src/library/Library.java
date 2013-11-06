@@ -113,12 +113,8 @@ public class Library {
                         case 'n':
                                 this.checkInOutMenu("in");
                                 break;
-                        case 't':
-                                this.checkInOutMenu("out"); 
-                                break;
-                        case 'r':
-                        //        this.returnToMainMenu(); // not yet implemented
-                                break;                
+                        case 'd':
+                        	    this.println("Today's date is " + this.calendar.getDate());               
                 }
         }
         
@@ -162,11 +158,12 @@ public class Library {
         		this.println("2. Serve patron.");
         		this.println("3. Search.");
         		this.println("4. Close library.");
-        		this.println("5. Quit.");
-        		this.print("Please enter 1, 2, 3, 4 or 5: ");
+        		this.println("5. Today's date.");
+        		this.println("6. Quit.");
+        		this.print("Please enter 1, 2, 3, 4, 5 or 6: ");
         		Scanner scanner = new Scanner(System.in);
         		input = scanner.nextLine().trim();
-        		if (input.equals("1") || input.equals("2") || 
+        		if (input.equals("1") || input.equals("2") || input.equals("6") ||
         		    input.equals("3") || input.equals("4") || input.equals("5")) {
         			valid = false;
         		}
@@ -185,6 +182,9 @@ public class Library {
         	}
         	else if (input.equals("4")) {
         		return "c";
+        	}
+        	else if (input.equals("5")){
+        		return "d";
         	}
         	else {
         		return "q";
@@ -207,13 +207,15 @@ public class Library {
         		this.println("3. Check in books.");
         		this.println("4. Search books.");
         		this.println("5. Close library.");
-        		this.println("6. Quit.");        		
-        		this.print("Please enter 1, 2, 3, 4, 5 or 6: ");
+        		this.println("6. Today's date.");
+        		this.println("7. Quit.");        		
+        		this.print("Please enter 1, 2, 3, 4, 5, 6 or 7: ");
         		Scanner scanner = new Scanner(System.in);
         		input = scanner.nextLine().trim();
         		if (input.equals("1") || input.equals("2") || 
         		    input.equals("3") || input.equals("4") ||
-        		    input.equals("5") || input.equals("6")) {
+        		    input.equals("5") || input.equals("6") ||
+        		    input.equals("7")) {
         			valid = false;
         		}
         		else {
@@ -234,6 +236,9 @@ public class Library {
         	}
         	else if (input.equals("5")) {
         		return "c";
+        	}
+        	else if (input.equals("6")){
+        		return "d";
         	}
         	else {
         		return "q";
