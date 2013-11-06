@@ -392,13 +392,13 @@ public class Library {
          * @param the function that you want to execute
          */
         public void patronInteractionMenu(String function){
-        	this.println("Please enter the name of your patron (enter 'q' to return to main menu): ");
+        	this.println("Please enter the name of your patron (enter 'r' to return to main menu): ");
         	Scanner scanner = new Scanner(System.in);
         	boolean valid = false;
         	while (!valid){
                	String input = scanner.next().trim();
           		input = this.toCapitalise(input);
-            	if (input.equals("Q")){
+            	if (input.equals("R")){
             			return; // returns to main menu
             	} else if (function.equals("issueCard")) {
             		try {
@@ -506,6 +506,9 @@ public class Library {
                 if (currentPatron == null){         // then check if there is a current Patron
                         throw new RuntimeException("Patron hasn't been served yet - please serve your patron first!");
                 }
+                if (bookNumbers == null) {
+                	this.println("return to the main menu.");
+                }
                 else {
                         ArrayList<Book> patronBooks = currentPatron.getBooks();
                         bookNumbers = this.bookNumbersToIndex(bookNumbers);
@@ -612,7 +615,7 @@ public class Library {
         }
         
         boolean isOverdue(Book book, int date){
-                if (book.getDueDate() >= date){
+                if (book.getDueDate() == date){
                         return true;
                 }
                 return false;
@@ -753,6 +756,9 @@ public class Library {
             if (this.searchedBooks.size() == 0) { // then check whether a search was made first
             	throw new RuntimeException("Please search the books first.");            	
             }
+            if (bookNumbers == null) {
+            	this.println("return to main menu.");
+            }
             else {
             	for (int bookNumber: bookNumbers) {
             		try { 
@@ -822,17 +828,22 @@ public class Library {
      	while (!valid) {
              this.println("\nPlease select the book(s) you want to check out according to the results above.");
              this.println("To select multiple books, please separate each entry with a comma (eg. 1, 2).");
-             // TO DO - allow user to return to main menu?
+             this.println("To go back to the main menu, please enter 'r'."); // allow user to return to main menu
              int numBooks = books.size();
              Scanner scanner = new Scanner(System.in);
-             input = scanner.next();
-             try {
-             	this.checkInOutInputValid(input, numBooks, function);
-             	valid = true;
+             input = scanner.nextLine();
+             if (input.toLowerCase().equals("r")) {
+            	 valid = true;
              }
-             catch (RuntimeException exception) {
-     	    	this.println(exception.getMessage());
-     	    }
+             else {
+            	 try {
+            		 this.checkInOutInputValid(input, numBooks, function);
+            		 valid = true;
+            	 }
+            	 catch (RuntimeException exception) {
+            		 this.println(exception.getMessage());
+            	 }
+             }
      	}
      	return parseToInt(input);
      }
@@ -855,38 +866,49 @@ public class Library {
         		if (this.isRepeatInputs(inputIntegers)){
         			throw new RuntimeException("Input includes repeated integers.");
         		}
-//        		if (function.equals("out")){
-//        			// TO DO this.isFewerThanThreeBooks(inputIntegers);
-//        			throw new RuntimeException("");		
-//        		}    		
+        		if (this.isFewerThanThreeBooks(inputIntegers)){
+        			throw new RuntimeException("A patron can have no more than 3 books checked out at same time.");		
+        		}    		
         	}
         	catch(NumberFormatException e) {
     			throw new RuntimeException(this.inputErrorMessage(input));
         	}
         	return true;
         }
- 
         
+        public boolean isFewerThanThreeBooks(int[] input) {
+        	if ((input.length + currentPatron.getBooks().size()) > 3) {
+        		return true;
+        	}
+        	else {
+        		return false;
+        	}
+        }
+        
+
         /**
          * takes in a string and parse it into int[].
          * @param input
          * @return
          */
-        public int[] parseToInt(String input) {  
-        	String[] tempStr = input.trim().split(",");
-        	System.out.println(tempStr.length);
-        	int[] tempInt = new int[tempStr.length];
-        	int i = 0;
-        	for (String temp: tempStr) {
-        		System.out.println(temp + " <- pre trim");
-        		temp = temp.trim();
-        		System.out.println(temp + " <- post trim");
-        		// if throws NumberFormatException, it will be caught in checkInOutInputValid().
-        		tempInt[i] = Integer.parseInt(temp); 
-        		i++;
-        	}  
-        	System.out.print(tempInt.length);
-        	return tempInt;
+        public int[] parseToInt(String input) {       	
+        	if (input.toLowerCase().equals("r")) {
+        		int[] temp = null;
+        		return temp;
+        	}
+        	else {
+        		input = input.replace(" ", "");
+        		String[] tempStr = input.split(",");
+        		int[] tempInt = new int[tempStr.length];
+        		int i = 0;
+        		for (String temp: tempStr) {
+        			temp = temp.trim();
+        			// if throws NumberFormatException, it will be caught in checkInOutInputValid().
+        			tempInt[i] = Integer.parseInt(temp); 
+        			i++;
+        		}  
+        		return tempInt;
+        	}
         }
         
         /**
