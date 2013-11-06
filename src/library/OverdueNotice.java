@@ -18,12 +18,12 @@ public class OverdueNotice {
 	@Override
 	public String toString() {
 		ArrayList<Book> dueBooks = new ArrayList<Book>();
-		String notice = "All the books checked out by the patron are: \n";
+		String notice = "All the books checked out by " + this.patron + " are: \n";
 		for (Book temp: this.patron.getBooks()) {
-			notice = notice + temp + "Due Date: " + temp.getDueDate() + "\n";
-			if (temp.getDueDate() < this.todaysDate) {
+			notice = notice + temp + " - Due Date: " + temp.getDueDate() + "\n";
+			if (temp.getDueDate() <= this.todaysDate) {
 				dueBooks.add(temp);
-				notice = notice + "Please pay attention that this book is overdue!! \n";
+				notice = notice + "This book is overdue!\n";
 			}
 		}
 	    return notice;
