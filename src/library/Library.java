@@ -711,27 +711,46 @@ public class Library {
         /**
          * implement the menu of search.
          */
-        public void searchMenu() {
-        	this.search(this.searchInput());
+        public void searchMenu() {        	
         	String input = "";
         	boolean valid = false;
-        	while(!valid) {
-        		this.println("You can: 1. Check out books.");
-        		this.println("         2. Go back to previous page.");
-        		this.print("Please enter 1 or 2: ");
-        		Scanner scanner = new Scanner(System.in);
-                input = scanner.next().trim();
-                if (input.equals("1") || input.equals("2")) {
-                	valid = true;
-                }
-                else {
-                	this.println(inputErrorMessage(input));
-                }
+        	if (currentPatron != null) {
+        		if (this.search(this.searchInput()).size() != 0) {
+        			while(!valid) {
+        				this.println("You can: 1. Check out books.");
+        				this.println("         2. Go back to previous page.");
+        				this.print("Please enter 1 or 2: ");
+        				Scanner scanner = new Scanner(System.in);
+        				input = scanner.next().trim();
+        				if (input.equals("1") || input.equals("2")) {
+        					valid = true;
+        				}
+        				else {
+        					this.println(inputErrorMessage(input));
+        				}
+        			}
+        		}
+        		else {
+        			while(!valid) {        			
+        				this.print("Please enter 'r' to go back to the main menu.");
+        				Scanner scanner = new Scanner(System.in);
+        				input = scanner.next().trim();
+        				if (input.equals("r") || input.equals("R")) {
+        					valid = true;
+        				}
+        				else {
+        					this.println(inputErrorMessage(input));
+        				}   
+        			}
+        		}
+        		if (input.equals("1")) {
+        			// TO DO - If I run a search and get no results, the program still 
+        			// prompts me to check out books or go back to previous menu. It should ask me to try another search.
+        			this.checkInOutMenu("out");
+        		}
         	}
-        	if (input.equals("1")) {
-        		// TO DO - If I run a search and get no results, the program still 
-        		// prompts me to check out books or go back to previous menu. It should ask me to try another search.
-        		this.checkInOutMenu("out");
+        	else {
+        		this.search(this.searchInput());
         	}
         }
  
