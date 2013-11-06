@@ -96,7 +96,7 @@ public class Library {
                                 this.open();
                                 break;
                         case 'q':
-                        //        this.quit(); // not yet implemented
+                                this.quit();
                                 break;
                         case 'i':
                                 this.patronInteractionMenu("issueCard");
@@ -111,10 +111,10 @@ public class Library {
                                 this.close();
                                 break;
                         case 'n':
-                        //        this.checkInMenu(); // not yet implemented
+                                this.checkInOutMenu("in");
                                 break;
                         case 't':
-                                this.checkOutMenu(); 
+                                this.checkInOutMenu("out"); 
                                 break;
                         case 'r':
                         //        this.returnToMainMenu(); // not yet implemented
@@ -160,12 +160,14 @@ public class Library {
         	while (valid) {
         		this.println("1. Issue card.");
         		this.println("2. Serve patron.");
-        		this.println("3. Close library.");
-        		this.println("4. Quit.");
+        		this.println("3. Search.");
+        		this.println("4. Close library.");
+        		this.println("5. Quit.");
+        		this.print("Please enter 1, 2, 3, 4 or 5: ");
         		Scanner scanner = new Scanner(System.in);
         		input = scanner.next().trim();
         		if (input.equals("1") || input.equals("2") || 
-        		    input.equals("3") || input.equals("4")) {
+        		    input.equals("3") || input.equals("4") || input.equals("5")) {
         			valid = false;
         		}
         		else {
@@ -179,6 +181,9 @@ public class Library {
         		return "s";
         	}
         	else if (input.equals("3")) {
+        		return "a";
+        	}
+        	else if (input.equals("4")) {
         		return "c";
         	}
         	else {
@@ -202,7 +207,8 @@ public class Library {
         		this.println("3. Check in books.");
         		this.println("4. Search books.");
         		this.println("5. Close library.");
-        		this.println("6. Quit.");
+        		this.println("6. Quit.");        		
+        		this.print("Please enter 1, 2, 3, 4, 5 or 6: ");
         		Scanner scanner = new Scanner(System.in);
         		input = scanner.next().trim();
         		if (input.equals("1") || input.equals("2") || 
@@ -247,11 +253,13 @@ public class Library {
                 String input = "";
                 boolean valid = false;
                 while (!valid){
-                        this.print("\t1. Open for business\n\t2. Quit\n\t");
+                        this.println("1. Open for business");
+                        this.println("2. Quit");
+                		this.print("Please enter 1 or 2: ");
                         Scanner scanner = new Scanner(System.in);
                         while (scanner.hasNext()){
                                 String unparsedText = scanner.next();
-                                if (this.isValidInput(unparsedText, 2)){
+                                if (unparsedText.equals("1") || unparsedText.equals("2")){
                                         if (unparsedText.equals("1")) {input = "o";}
                                         else if (unparsedText.equals("2")) {input = "q";}
                                         else {throw new RuntimeException("closeMenuInputError");}
@@ -266,31 +274,17 @@ public class Library {
                 return input;
         }
         
-        /**
-         * Validates input - ensures that a) input is a valid integer, b) it corresponds to one of the numbers on the menu
-         * @param input
-         * @param maxOptions - the number of options in the menu (assumes menu is comprised of consecutive positive numbers)
-         * @return
-         */
-        public boolean isValidInput(String input, int maxOptions){
-                if (!isInt(input)){
-                        return false;
-                } else if (!isWithinRange(input, maxOptions)){
-                        return false;
-                }
-                return true;
-        }
-        
         
         /**
          * Checks that input lies within the range of 1 to maxOptions (inclusive)
-         * @param input - input number
+         * @param input - Array of inputs
          * @param max - max number
          * @return true if input lies within the range of 1 to maxOptions (inclusive) (boolean)
          */
-        public boolean isWithinRange(String input, int max){
-                int inputInt = Integer.parseInt(input);
-                if (inputInt < 1 || inputInt > max){
+        public boolean isWithinRange(int[] input, int max){
+        		int[] inputReverse = this.reverseSortList(input);
+        		int maxInput = inputReverse[0];
+                if (maxInput < 1 || maxInput > max){
                         return false;
                 }
                 return true;
@@ -358,7 +352,7 @@ public class Library {
                 return overdueNoticeList;
         }
         
-        /*
+        /**
          * Closes the library
          */
         public void close(){
@@ -371,6 +365,15 @@ public class Library {
                         this.currentPatron = null;
                         this.searchedBooks = null;
                 }
+        }
+        
+        /**
+         * Quits the program
+         */
+        public void quit(){
+        	this.println("Are you sure you want to shut down the libra... <library shut down...>");
+        	this.println("I'm now just a boring Java console.");
+        	System.exit(0);
         }
         
         /**
@@ -455,8 +458,9 @@ public class Library {
                         if(this.patronList.containsKey(nameOfPatron)){
                                 servedPatron = this.patronList.get(nameOfPatron);
                                 this.println("\nReady to serve " + nameOfPatron + ".");
-                                this.printPatronBooks(servedPatron);
                                 currentPatron = servedPatron; // set instance variable currentPatron to servedPatron
+                                this.println("\n" + currentPatron.getName() + " has borrowed the following books:");
+                                this.printBooks(this.currentPatron.getBooks());
                         }
                         else{
                                 throw new RuntimeException("Sorry, " + nameOfPatron + " hasn't been issued a card at this library. "
@@ -469,33 +473,22 @@ public class Library {
         }
         
         /**
-         * Prints out a list of all the books the patron has borrowed
-         * @param patron - the Patron object
+         * Prints out a list of all the books of an ArrayList of books
          */
-        public void printPatronBooks(Patron patron){
-                ArrayList<Book> patronBooks = patron.getBooks();
-                if (!patronBooks.isEmpty()){
-                        Iterator<Book> bookIt = patronBooks.iterator();
+        public void printBooks(ArrayList<Book> books){
+                if (!books.isEmpty()){
+                        Iterator<Book> bookIt = books.iterator();
                         int itemNumber = 1; // initiates at 1 - this is the index of the book in the ArrayList + 1
-                        this.println("\n" + patron.getName() + " has borrowed the following books:");
                         while (bookIt.hasNext()){
                                 Book book = bookIt.next();
                                 this.println(Integer.toString(itemNumber) + ": " + book.toString());
                                 itemNumber ++;
                         }
                 } else {
-                	this.println(patron.getName() + " has not borrowed any books.");
+                	this.println("There are no books in the list.");
                 }
         }
-        
-        public void checkInMenu(){
-        	if (this.currentPatron.getBooks().isEmpty()){
-        		this.println(this.currentPatron.getName() + " has not borrowed any books.");
-        		return;
-        	}
-        	// to do - implement IO
-        	// parse input
-        }
+
         
         /**
          * The listed books are being returned by the current Patron (there must be one!), 
@@ -522,6 +515,7 @@ public class Library {
                                         Book returnBook = patronBooks.get(bookNumber);                
                                         currentPatron.giveBack(returnBook);
                                         returnBook.checkIn();
+                                        this.books.add(returnBook);
                                         checkedInBooks.add(returnBook);
                                         this.println("\nSuccessfully returned: " + returnBook.toString());
                                 }
@@ -679,7 +673,7 @@ public class Library {
                                     }
                             }
                             if (this.searchedBooks.size() == 0) {
-                                    println("Sorry no result.");
+                                    println("Sorry, there were no results.");
                             }
                             return result;
                     }
@@ -688,7 +682,7 @@ public class Library {
                     }
             }
                 else {
-                    throw new RuntimeException("the key word should be at least 4 characters long.");                
+                    throw new RuntimeException("The search term should be at least 4 characters long.");                
                 }
         }
         
@@ -699,11 +693,11 @@ public class Library {
          */
         public String searchInput() {
         	String input = "";
-            this.print("Please enter the keywords for searching (either the author or the title).");
+            this.print("Please enter your search term (author name or book title, must be at least 4 characters long).");
             Scanner scanner = new Scanner(System.in);
             input = scanner.next().trim();
             if (input.length() < 4) {
-            	this.println("the key words should be at least 4 characters long");
+            	this.println("The search term should be at least 4 characters long.");
             	return searchInput();
             }
             else {
@@ -721,7 +715,7 @@ public class Library {
         	while(!valid) {
         		this.println("You can: 1. Check out books.");
         		this.println("         2. Go back to previous page.");
-        		this.println("type 1 or 2 to choose");
+        		this.print("Please enter 1 or 2: ");
         		Scanner scanner = new Scanner(System.in);
                 input = scanner.next().trim();
                 if (input.equals("1") || input.equals("2")) {
@@ -732,10 +726,13 @@ public class Library {
                 }
         	}
         	if (input.equals("1")) {
-        		this.checkOutMenu();
+        		// TO DO - If I run a search and get no results, the program still 
+        		// prompts me to check out books or go back to previous menu. It should ask me to try another search.
+        		this.checkInOutMenu("out");
         	}
         }
  
+        
         /**
          * Either checks out the book to the Patron currently being served, 
          * or tells why the operation is not permitted. 
@@ -760,7 +757,7 @@ public class Library {
             	for (int bookNumber: bookNumbers) {
             		try { 
             			if (currentPatron.getBooks().size() > 3) {
-            				throw new RuntimeException("You can have at most 3 books checked out at a time.");
+            				throw new RuntimeException("You can only take out a maximum of 3 books.");
             			}
             			else {
             		        Book checkedBook = this.searchedBooks.get(bookNumber);
@@ -769,88 +766,190 @@ public class Library {
             		        checkedBooks.add(checkedBook);
             		        checkedBook.checkOut(calendar.getDate() + 7);
             		        currentPatron.take(checkedBook);
-            		        this.println("successfully checked out the book: " + checkedBook.toString());
+            		        this.println("Successfully checked out: " + checkedBook.toString());
             			}
             	    }
             	    catch (NullPointerException exception){
                        this.println(this.inputErrorMessage(Integer.toString(bookNumber)));
-                       this.checkOutMenu();
+                       this.checkInOutMenu("out");
             	    }
             	}
             }
             return checkedBooks;
         }
+
+        
+        
+
+ 
+      /**
+      * implement the check-in & check-out menu.
+      * @param function - whether it's check-in ("in") or check-out ("out").
+      */
+     public void checkInOutMenu(String function) {
+    	this.println("Below is the list of books you can check " + function + ": \n"); 
+    	ArrayList<Book> books = new ArrayList<Book>();
+    	 if (function.equals("in")){
+    		 books = this.currentPatron.getBooks();
+    	 } else { 			// check out
+    		 books = new ArrayList<Book>(this.searchedBooks.values());
+    	 }
+     	this.printBooks(books);
+    	 
+    	if (books.isEmpty()){
+    		 return;			// exit sub-menu if list is empty
+    	} else {  	 
+    	     	if (function.equals("in")){
+    	     		this.checkIn(this.checkInOutInput(function, books)); 
+    	     		
+    	     	} else {
+    	     		this.checkOut(this.checkInOutInput(function, books)); 
+    	     	}
+    	 }
+     }
+        
+
+     /**
+      * ask user to input the index of books in the searching result
+      * to get checked out.
+      * check the validation and return a Integer
+      * @function - whether it's check-in ("in") or check-out ("out")
+      * @return
+      */
+     public int[] checkInOutInput(String function, ArrayList<Book> books) {
+     	String input = "";
+     	Boolean valid = false;
+     	while (!valid) {
+             this.println("\nPlease select the book(s) you want to check out according to the results above.");
+             this.println("To select multiple books, please separate each entry with a comma (eg. 1, 2).");
+             // TO DO - allow user to return to main menu?
+             int numBooks = books.size();
+             Scanner scanner = new Scanner(System.in);
+             input = scanner.next();
+             try {
+             	this.checkInOutInputValid(input, numBooks, function);
+             	valid = true;
+             }
+             catch (RuntimeException exception) {
+     	    	this.println(exception.getMessage());
+     	    }
+     	}
+     	return parseToInt(input);
+     }
+     
         
         /**
-         * ask user to input the index of books in the searching result
-         * to get checked out.
-         * check the validation and return a Integer
+         * check the validation of input for checkout books.
+         * @param function - whether it's check-in ("in") or check-out ("out").
+         * @param input - the input string
+         * @param numBooks - number of books either in the patron's possession 
+         * (if function = "in") or search results (if function = "out")
          * @return
          */
-        public int[] checkoutInput() {
-        	String input = "";
-        	Boolean valid = true;
-        	while (valid) {
-                this.println("Please choose which book or books you want to check out according to the searching result.");
-                this.println("To choose mutiple books at one time, please enter indexes split by the comma.");
-                Scanner scanner = new Scanner(System.in);
-                input = scanner.next();
-                if (checkoutInputValid(input)) {
-                	valid = false;
-                }
-                else {
-        	    	this.println(inputErrorMessage(input));
-        	    }
+        public boolean checkInOutInputValid(String input, int numBooks, String function) {
+        	try {
+        		int[] inputIntegers = this.parseToInt(input);
+        		if (!this.isWithinRange(inputIntegers, numBooks)){
+	        			throw new RuntimeException("Input includes number not in list.");
+        		}
+        		if (this.isRepeatInputs(inputIntegers)){
+        			throw new RuntimeException("Input includes repeated integers.");
+        		}
+//        		if (function.equals("out")){
+//        			// TO DO this.isFewerThanThreeBooks(inputIntegers);
+//        			throw new RuntimeException("");		
+//        		}    		
         	}
-        	return parseToInt(input);
-        }
-        
-        /**
-         * implement the menu of check out.
-         */
-        public void checkOutMenu() {
-        	boolean valid = false;
-        	while (!valid) {
-        		int[] temp = this.checkoutInput();
+        	catch(NumberFormatException e) {
+    			throw new RuntimeException(this.inputErrorMessage(input));
         	}
-        	this.checkOut(this.checkoutInput());        	
+        	return true;
         }
+ 
         
         /**
          * takes in a string and parse it into int[].
          * @param input
          * @return
          */
-        public int[] parseToInt(String input) {     	
+        public int[] parseToInt(String input) {  
         	String[] tempStr = input.trim().split(",");
+        	System.out.println(tempStr.length);
         	int[] tempInt = new int[tempStr.length];
         	int i = 0;
         	for (String temp: tempStr) {
-        		// if throws NumberFormatException, it will be catched in checkoutInputValid().
+        		System.out.println(temp + " <- pre trim");
+        		temp = temp.trim();
+        		System.out.println(temp + " <- post trim");
+        		// if throws NumberFormatException, it will be caught in checkInOutInputValid().
         		tempInt[i] = Integer.parseInt(temp); 
         		i++;
-        	}        	
+        	}  
+        	System.out.print(tempInt.length);
         	return tempInt;
         }
         
         /**
-         * check the validation of input for checkout books.
-         * @param input
+         * Checks an array of integers to see if any numbers are repeated.
+         * Returns true if integers are repeated
+         * @param inputs array of integers
          * @return
          */
-        public boolean checkoutInputValid(String input) {
-        	try {
-        		this.parseToInt(input);
-        		
-        		
+        public boolean isRepeatInputs(int[] inputs){
+        	inputs = this.reverseSortList(inputs);
+        	int inputsLength = inputs.length;
+        	for (int i = 0; i < inputsLength - 1; i++){
+        		if (inputs[i] == inputs[i + 1]){
+        			return true;
+        		}
         	}
-        	catch(NumberFormatException e) {
-        		return false;
-        	}
+        	return false;
         }
-        
-        
-        
+ 
+//      /***
+//      * MAY NEED TO REMOVE
+//      ***/
+//        
+//        /**
+//         * ask user to input the index of books in the searching result
+//         * to get checked out.
+//         * check the validation and return a Integer
+//         * @return
+//         */
+//        public int[] checkoutInput() {
+//        	String input = "";
+//        	Boolean valid = true;
+//        	while (valid) {
+//                this.println("Please choose which book or books you want to check out according to the searching result.");
+//                this.println("To choose mutiple books at one time, please enter indexes split by the comma.");
+//                Scanner scanner = new Scanner(System.in);
+//                input = scanner.next();
+//                if (checkoutInputValid(input)) {
+//                	valid = false;
+//                }
+//                else {
+//        	    	this.println(inputErrorMessage(input));
+//        	    }
+//        	}
+//        	return parseToInt(input);
+//        }
+//  
 
-
-} // test1
+//        
+//        /**
+//         * implement the menu of check out.
+//         */
+//        public void checkOutMenu() {
+//        	boolean valid = false;
+//        	while (!valid) {
+//        		int[] temp = this.checkoutInput();
+//        	}
+//        	this.checkOut(this.checkoutInput());        	
+//        }
+//        
+//        /***
+//         * MAY NEED TO REMOVE
+//         ***/
+        
+}
+        

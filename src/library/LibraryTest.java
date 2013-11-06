@@ -543,29 +543,35 @@ public class LibraryTest {
                 assertFalse(library.isInt("0a"));
         }
         
-    /**
-     * Test method for isValidInput
-     */        
-        @Test 
-        public void testisValidInput() {
-                assertTrue(library.isValidInput("3", 3));
-                assertTrue(library.isValidInput("1", 3));
-                assertFalse(library.isValidInput("3", 2));
-                assertFalse(library.isValidInput("0", 2));
-                assertFalse(library.isValidInput("z", 2));
-                assertFalse(library.isValidInput("-1", 2));
-        }
+//    /**
+//     * Test method for isValidInput
+//     */        
+//        @Test 
+//        public void testisValidInput() {
+//                assertTrue(library.isValidInput("3", 3));
+//                assertTrue(library.isValidInput("1", 3));
+//                assertFalse(library.isValidInput("3", 2));
+//                assertFalse(library.isValidInput("0", 2));
+//                assertFalse(library.isValidInput("z", 2));
+//                assertFalse(library.isValidInput("-1", 2));
+//        }
         
     /**
      * Test method for testisWithinRange
      */        
         @Test 
         public void testisWithinRange() {
-                assertTrue(library.isWithinRange("3", 3));
-                assertTrue(library.isWithinRange("1", 3));
-                assertFalse(library.isWithinRange("3", 2));
-                assertFalse(library.isWithinRange("0", 2));
-                assertFalse(library.isWithinRange("-1", 2));
+        		int[] array1 = new int[3];
+        		array1[0] = 3;
+        		array1[1] = 7;
+        		array1[2] = 5;
+        		int[] array2 = new int[2];
+        		array2[0] = 0;
+        		array2[1] = 7;
+                assertFalse(library.isWithinRange(array1, 5));
+                assertTrue(library.isWithinRange(array1, 7));
+                assertTrue(library.isWithinRange(array1, 8));
+                assertFalse(library.isWithinRange(array2, 6));
         }
         
      /**
@@ -574,20 +580,56 @@ public class LibraryTest {
         @Test
         public void testParseToInt() {
         	assertEquals(1, library.parseToInt("1,2,3")[0]);
+        	assertEquals(2, library.parseToInt("1,2,3")[1]);
+        	assertEquals(3, library.parseToInt("1,2,3")[2]);
         	assertEquals(2, library.parseToInt("2")[0]);
         	assertEquals(2, library.parseToInt(" 2 ")[0]);
+        	assertEquals(1, library.parseToInt("1,2, 4, 1")[0]);
+        	assertEquals(2, library.parseToInt("1,2, 4, 1")[1]);
+        	assertEquals(1, library.parseToInt("1,2, 4, 1")[3]);
         }
+        
+        /**
+         * Test method for isRepeatInputs
+         */
+           @Test
+           public void testisRepeatInputs() {
+       		int[] array1 = new int[3];
+       		array1[0] = 3;
+       		array1[1] = 5;
+       		array1[2] = 3;
+       		int[] array2 = new int[2];
+       		array2[0] = 1;
+       		array2[1] = 7;
+       		int[] array3 = new int[3];
+       		array3[0] = 5;
+       		array3[1] = 7;
+       		array3[2] = 7;
+           	assertTrue(library.isRepeatInputs(array1));
+           	assertFalse(library.isRepeatInputs(array2));
+           	assertTrue(library.isRepeatInputs(array3));
+           }
+        
+        
      /**
       * Test method for checkoutInputValid
       */
         @Test
-        public void testCheckoutInputValid() {
-        	assertTrue(library.checkoutInputValid("2,3,1"));
-        	assertTrue(library.checkoutInputValid("2"));
-        	assertTrue(library.checkoutInputValid("2,3,"));
-        	assertTrue(library.checkoutInputValid(" 2,3 "));
-        	
+        public void testCheckInOutInputValid(){	
+        	assertTrue(library.checkInOutInputValid("2,3,1", 3, "out"));
+        	assertTrue(library.checkInOutInputValid("2,3,", 3, "out"));
+        	assertTrue(library.checkInOutInputValid(" 2,3 ", 3, "out")); 	
+        	assertTrue(library.checkInOutInputValid(" 2,1 ", 2, "out"));    	
+        	assertTrue(library.checkInOutInputValid("1", 2, "out"));    	
         }
+
+        @Test(expected=RuntimeException.class)
+        public void testCheckInOutInputValidOutOfRange(){
+        	library.checkInOutInputValid("2, 2", 3, "out");
+        	library.checkInOutInputValid(" 2,3 ", 2, "out");
+        	library.checkInOutInputValid("abba,1", 2, "out");
+        }
+
         
         /*
          * unit tests for toCapitalise
