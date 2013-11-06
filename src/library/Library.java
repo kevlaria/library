@@ -402,19 +402,22 @@ public class Library {
         	boolean valid = false;
         	while (!valid){
                	String input = scanner.nextLine().trim();
-          		input = this.toCapitalise(input);
-            	if (input.equals("R")){
+          		if (input.equals("R")){
             			return; // returns to main menu
-            	} else if (function.equals("issueCard")) {
+            	} 
+          		else if (function.equals("issueCard")) {
             		try {
+            			input = this.toCapitalise(input);
                 		this.issueCard(input);
             			valid = true;
             		}	
             		catch (RuntimeException exception){            		
             			this.println(exception.getMessage());
+            			valid = true;
                 	}		
             	} else if (function.equals("serve")){
             		try {
+            			input = this.toCapitalise(input);
             			this.serve(input);
             			valid = true;
             		}
@@ -953,51 +956,6 @@ public class Library {
         	}
         	return false;
         }
- 
-//      /***
-//      * MAY NEED TO REMOVE
-//      ***/
-//        
-//        /**
-//         * ask user to input the index of books in the searching result
-//         * to get checked out.
-//         * check the validation and return a Integer
-//         * @return
-//         */
-//        public int[] checkoutInput() {
-//        	String input = "";
-//        	Boolean valid = true;
-//        	while (valid) {
-//                this.println("Please choose which book or books you want to check out according to the searching result.");
-//                this.println("To choose mutiple books at one time, please enter indexes split by the comma.");
-//                Scanner scanner = new Scanner(System.in);
-//                input = scanner.next();
-//                if (checkoutInputValid(input)) {
-//                	valid = false;
-//                }
-//                else {
-//        	    	this.println(inputErrorMessage(input));
-//        	    }
-//        	}
-//        	return parseToInt(input);
-//        }
-//  
-
-//        
-//        /**
-//         * implement the menu of check out.
-//         */
-//        public void checkOutMenu() {
-//        	boolean valid = false;
-//        	while (!valid) {
-//        		int[] temp = this.checkoutInput();
-//        	}
-//        	this.checkOut(this.checkoutInput());        	
-//        }
-//        
-//        /***
-//         * MAY NEED TO REMOVE
-//         ***/
         
 }
         

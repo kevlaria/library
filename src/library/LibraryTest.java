@@ -8,7 +8,6 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -436,7 +435,7 @@ public class LibraryTest {
      * *****************
      */
     
-    /*
+    /**
      * Test method for createSinglePatronOverdueNotice
      */
     @Test
@@ -445,10 +444,10 @@ public class LibraryTest {
             bob.take(contact);
             OverdueNotice notice = library.createSinglePatronOverdueNotice(bob);
             System.out.println(notice);
-                fail("Not yet implemented");
+                //fail("Not yet implemented");
     }
     
-    /*
+    /**
      * Test method for isOverdue()
      */
     @Test
