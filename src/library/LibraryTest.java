@@ -632,4 +632,20 @@ public class LibraryTest {
         	assertEquals("R", library.toCapitalise("r"));
         	assertEquals("Jo", library.toCapitalise("jo"));
         }
+        
+        /*
+         * unit test isFewerThanThreeBooks(inputIntegers)
+         */
+        @Test
+        public void testisFewerThanThreeBooks(){
+        	int[] inputIntegers = new int[2];
+        	inputIntegers[0] = 1;
+        	inputIntegers[1] = 2;
+        	Patron dave = openAndServeDave();
+        	dave.take(contact);
+        	assertFalse(library.isFewerThanThreeBooks(inputIntegers));
+        	dave.take(witches);
+        	assertTrue(library.isFewerThanThreeBooks(inputIntegers));
+        }
+        
 }
