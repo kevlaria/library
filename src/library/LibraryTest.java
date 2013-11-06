@@ -606,6 +606,7 @@ public class LibraryTest {
       */
         @Test
         public void testCheckInOutInputValid(){	
+        	Patron dave = openAndServeDave();
         	assertTrue(library.checkInOutInputValid("2,3,1", 3, "out"));
         	assertTrue(library.checkInOutInputValid("2,3,", 3, "out"));
         	assertTrue(library.checkInOutInputValid(" 2,3 ", 3, "out")); 	
