@@ -888,7 +888,7 @@ public class Library {
         		if (this.isFewerThanThreeBooks(inputIntegers)){
         			
         			throw new RuntimeException("A patron can have no more than 3 books checked out at same time. "
-        					+ currentPatron.getName() + " has taken out " + inputIntegers.length + " books. ");		
+        					+ currentPatron.getName() + " has taken out " + currentPatron.getBooks().size() + " books. ");		
         		}
         	}
         	catch(NumberFormatException e) {
