@@ -50,6 +50,13 @@ public class LibraryTest {
 		library = new Library(books);
 	}
 
+	private Patron openAndServeDave() {
+		library.open();
+		Patron dave = library.issueCard("Dave");
+		library.serve("Dave");
+		return dave;
+	}
+	
 	/**
 	 * Test method for {@link library.Library#open()}.
 	 */
@@ -60,16 +67,21 @@ public class LibraryTest {
 		// an ArrayList<Book>.
 		assertEquals(new ArrayList<OverdueNotice>(), library.open());
 	}
-
-	private Patron openAndServeDave() {
+	
+	/**
+	 * Test method to ensure that calendar changes date 
+	 */
+	@Test
+	public void testOpenAdvanceDay() {
+		int today = library.getCalendar().getDate();
 		library.open();
-		Patron dave = library.issueCard("Dave");
-		library.serve("Dave");
-		return dave;
+		assertEquals(today + 1, library.getCalendar().getDate());
 	}
+	
 
 	/**
 	 * Test method for {@link library.Library#createOverdueNotices()}.
+	 * Also tests isOverdue
 	 */
 	@Test
 	public void testCreateOverdueNotices() {
@@ -78,6 +90,7 @@ public class LibraryTest {
 		openAndServeDave();
 		ArrayList<Book> foundBooks = library.search("Equal Rites");
 		assertEquals(equalRites, foundBooks.get(0));
+		Book book = foundBooks.get(0);
 		library.checkOut(1);
 		int dueDate = 7;
 		// Don't send an overdue notice during the next seven days
@@ -89,11 +102,16 @@ public class LibraryTest {
 		library.close();
 		// Send a notice on the 8th day
 		notices = library.open();
+		int yesterday = library.getCalendar().getDate() - 1;
+		assertTrue(library.isOverdue(book, yesterday)); // Book is overdue yesterday
 		assertFalse(notices.isEmpty());
 		library.close();
 		// Don't send another notice after that
 		notices = library.open();
 		assertTrue(notices.isEmpty());
+		yesterday = library.getCalendar().getDate() - 1;
+		assertFalse(library.isOverdue(book, yesterday)); // Book is no longer considered 'overdue'
+
 	}
 
 	/**
@@ -144,6 +162,22 @@ public class LibraryTest {
 		Patron dave = library.issueCard("Dave");
 		Patron paula = library.issueCard("Paula");
 		assertEquals(dave, library.serve("Dave"));
+		assertEquals(dave, library.getCurrentPatron()); 
+	}
+	
+	@Test
+	public void testServeCorrectPatron() {
+		// Tests to ensure that currentPatron is set to the most recent patron being served
+		library.open();
+		Patron dave = library.issueCard("Dave");
+		Patron paula = library.issueCard("Paula");
+		assertTrue(library.getCurrentPatron() == null); // no-one served yet 
+		assertEquals(dave, library.serve("Dave"));
+		assertEquals(dave, library.getCurrentPatron()); // dave is being served
+		assertEquals(paula, library.serve("Paula"));
+		assertEquals(paula, library.getCurrentPatron()); // paula is being served
+		library.close();
+		assertTrue(library.getCurrentPatron() == null); // no-one served 
 	}
 
 	/**
@@ -333,6 +367,7 @@ public class LibraryTest {
 		library.checkIn(1);
 		library.checkIn(1);
 	}
+	
 
 	/**
 	 * Test method for {@link library.Library#checkIn(int[])}.
@@ -429,6 +464,22 @@ public class LibraryTest {
 		library.close();
 		library.issueCard("Steve"); // Illegal when library is closed
 	}
+	
+	/*
+	 * unit test for close()
+	 */
+	@Test
+	public void testCloseAndClearsSearchedBookListAndCurrentPatron(){
+		library.open();
+		openAndServeDave();
+		library.search("Equal Rites");
+		assertTrue(library.getSearchedBooks() != null);
+		assertTrue(library.getCurrentPatron() != null);
+		library.close();
+		assertTrue(library.getSearchedBooks() == null);
+		assertTrue(library.getCurrentPatron() == null);
+	}
+	
 
 	/***************
 	 * Additional tests
@@ -442,7 +493,6 @@ public class LibraryTest {
 	public void testisOverdue(){
 		assertFalse(library.isOverdue(contact, 0));
 		assertTrue(library.isOverdue(contact, -1));
-
 	}
 
 	/**
@@ -566,6 +616,12 @@ public class LibraryTest {
 		assertEquals(1, library.parseToInt("1,2, 4, 1")[3]);
 	}
 
+	@Test(expected=NumberFormatException.class)
+	public void testParseToIntWithNonNumber() {
+		library.parseToInt("a");
+	}
+	
+	
 	/**
 	 * Test method for isRepeatInputs
 	 */
@@ -607,6 +663,18 @@ public class LibraryTest {
 		library.checkInOutInputValid(" 2,3 ", 2, "out");
 		library.checkInOutInputValid("abba,1", 2, "out");
 	}
+	
+	@Test
+	public void testCheckInInputValidWithFullBookWithdrawal(){
+		openAndGiveBooksToDave();
+		assertTrue(library.checkInOutInputValid("1,2", 3, "in"));		
+	}
+	
+	@Test(expected=RuntimeException.class)
+	public void testCheckOutInputValidWithFullBookWithdrawal(){
+		openAndGiveBooksToDave();
+		assertTrue(library.checkInOutInputValid("1,2", 3, "out"));		
+	}
 
 
 	/**
@@ -635,5 +703,7 @@ public class LibraryTest {
 		dave.take(witches);
 		assertTrue(library.isFewerThanThreeBooks(inputIntegers));
 	}
+	
+
 
 }

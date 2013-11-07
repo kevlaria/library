@@ -25,7 +25,7 @@ public class Library {
 		Library library = new Library();
 		library.start();
 	}
-
+	
 
 	/**
 	 * Library constructor (for 1-time initiation only)
@@ -627,7 +627,7 @@ public class Library {
 
 
 	/**
-	 * Check if a book is overdue.
+	 * Check if a book is overdue. Only returns true on the due date itself.
 	 * @param book
 	 * @param date
 	 * @return
@@ -673,7 +673,7 @@ public class Library {
 
 	/**
 	 * Prints out, and saves in an instance variable, 
-	 * an list of books whose title or author contains the key word.
+	 * a list of books whose title or author contains the key word.
 	 * @param part
 	 * @return
 	 */
@@ -752,19 +752,6 @@ public class Library {
 					}
 				}
 			}
-//			else {
-//				while(!valid) {        			
-//					this.print("Enter 'r' to return to the main menu.");
-//					Scanner scanner = new Scanner(System.in);
-//					input = scanner.nextLine().trim();
-//					if (input.equals("r") || input.equals("R")) {
-//						valid = true;
-//					}
-//					else {
-//						this.println(inputErrorMessage(input));
-//					}   
-//				}
-//			}
 			if (input.equals("1")) {      		
 				this.checkInOutMenu("out");
 			}
@@ -976,6 +963,47 @@ public class Library {
 		}
 		return false;
 	}
+	
+	/**
+	 * Getter for calendar
+	 * @return Calendar
+	 */
+	public Calendar getCalendar(){
+		return this.calendar;
+	}
+	
+	/**
+	 * Getter for patronList
+	 * @return patron list (HashMap<String, Patron>)
+	 */
+	public HashMap<String, Patron> getPatronList(){
+		return this.patronList;
+	}
+	
+	/**
+	 * Getter for current Patron
+	 * @return Patron
+	 */
+	public Patron getCurrentPatron(){
+		return this.currentPatron;
+	}
+	
+	/**
+	 * Getter for searchedBooks
+	 * @return list of books (HashMap<Integer, Book>)
+	 */
+	public HashMap<Integer, Book> getSearchedBooks(){
+		return this.searchedBooks;
+	}
+	
+	/**
+	 * Getter for books
+	 * @return list of books (ArrayList<Book>)
+	 */
+	public ArrayList<Book> getBooks(){
+		return this.books;
+	}
+	
 
 
 }
