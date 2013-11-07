@@ -88,7 +88,8 @@ public class Library {
 			this.checkInOutMenu("in");
 			break;
 		case 'd':
-			this.println("Today's date is " + this.calendar.getDate());               
+			this.println("Today's date is " + this.calendar.getDate() + ".");
+			break;
 		}
 	}
 
@@ -98,18 +99,18 @@ public class Library {
 	 */
 	public String mainMenu(){
 		String input = "";
-		this.println("\nWelcome! What would you like to do?");
+		this.println("\nMain Menu \nToday is day " + this.calendar.getDate() + "\n\nWhat would you like to do?");
 		if (!isOpen){                // Library is closed
-			this.println("(The library is currently closed.)");
+			this.println("(The library is currently closed.)\n");
 			input = this.closedLibraryMenuInput();
 			return input;
 		}
 		else {
 			if (this.currentPatron == null){ // Library is open but no patron is being served
-				this.println("(The library is open, but is not serving anyone.)");
+				this.println("(The library is open, but is not serving anyone.)\n");
 				input = this.openMenuWithNoPatron();
 			} else { // Library is open and patron is being served
-				this.println("(The library is open, and is currently serving " + this.currentPatron.getName() + ".)");
+				this.println("(The library is open, and is currently serving " + this.currentPatron.getName() + ".)\n");
 				input = this.openMenuWithCurrentPatron(); 
 			}
 		}
@@ -133,7 +134,7 @@ public class Library {
 			this.println("2. Serve patron.");
 			this.println("3. Search.");
 			this.println("4. Close library.");
-			this.println("5. Today's date.");
+			this.println("5. Get today's date.");
 			this.println("6. Quit.");
 			this.print("Please enter 1, 2, 3, 4, 5 or 6: ");
 			Scanner scanner = new Scanner(System.in);
@@ -183,7 +184,7 @@ public class Library {
 			this.println("3. Check in books.");
 			this.println("4. Search books.");
 			this.println("5. Close library.");
-			this.println("6. Today's date.");
+			this.println("6. Get today's date.");
 			this.println("7. Quit.");        		
 			this.print("Please enter 1, 2, 3, 4, 5, 6 or 7: ");
 			Scanner scanner = new Scanner(System.in);
@@ -233,8 +234,8 @@ public class Library {
 		String input = "";
 		boolean valid = false;
 		while (!valid){
-			this.println("1. Open for business");
-			this.println("2. Quit");
+			this.println("1. Open for business.");
+			this.println("2. Quit.");
 			this.print("Please enter 1 or 2: ");
 			Scanner scanner = new Scanner(System.in);
 			while (scanner.hasNext()){
@@ -329,7 +330,7 @@ public class Library {
 					this.println(temp.toString());        				
 				}
 			} else {
-				this.println("No overdue notices sent out today");
+				this.println("No overdue notices were sent out today.");
 			}
 		}
 		catch(RuntimeException exception) {
@@ -480,7 +481,7 @@ public class Library {
 				itemNumber ++;
 			}
 		} else {
-			this.println("There are no books in the list.");
+			this.println("The book list is empty.");
 		}
 	}
 
@@ -515,7 +516,7 @@ public class Library {
 					returnBook.checkIn();
 					this.books.add(returnBook);
 					checkedInBooks.add(returnBook);
-					this.println("\nSuccessfully returned: " + returnBook.toString());
+					this.println("Successfully returned: " + returnBook.toString());
 				}
 				catch (IndexOutOfBoundsException exception){
 					throw new RuntimeException(this.inputErrorMessage(Integer.toString(bookNumber)));
@@ -598,7 +599,7 @@ public class Library {
 				}
 			} 
 		} else {
-			throw new RuntimeException("The library has no patrons!");
+			throw new RuntimeException("No overdue notices were sent out today.");
 		}
 		return overdueNoticeList;
 	}
@@ -715,7 +716,7 @@ public class Library {
 	 */
 	public String searchInput() {
 		String input = "";
-		this.print("Please enter your search term (author name or book title, must be at least 4 characters long).");
+		this.print("\nPlease enter your search term (author name or book title, must be at least 4 characters long).");
 		Scanner scanner = new Scanner(System.in);
 		input = scanner.nextLine().trim();
 		if (input.length() < 4) {
@@ -737,8 +738,9 @@ public class Library {
 		if (currentPatron != null) {
 			if (this.search(this.searchInput()).size() != 0) {
 				while(!valid) {
-					this.println("You can: 1. Check out books.");
-					this.println("         2. Go back to previous page.");
+					this.println("\nYou can:");
+					this.println("1. Check out books.");
+					this.println("2. Return to the main menu.");
 					this.print("Please enter 1 or 2: ");
 					Scanner scanner = new Scanner(System.in);
 					input = scanner.nextLine().trim();
@@ -750,19 +752,19 @@ public class Library {
 					}
 				}
 			}
-			else {
-				while(!valid) {        			
-					this.print("Please enter 'r' to go back to the main menu.");
-					Scanner scanner = new Scanner(System.in);
-					input = scanner.nextLine().trim();
-					if (input.equals("r") || input.equals("R")) {
-						valid = true;
-					}
-					else {
-						this.println(inputErrorMessage(input));
-					}   
-				}
-			}
+//			else {
+//				while(!valid) {        			
+//					this.print("Enter 'r' to return to the main menu.");
+//					Scanner scanner = new Scanner(System.in);
+//					input = scanner.nextLine().trim();
+//					if (input.equals("r") || input.equals("R")) {
+//						valid = true;
+//					}
+//					else {
+//						this.println(inputErrorMessage(input));
+//					}   
+//				}
+//			}
 			if (input.equals("1")) {      		
 				this.checkInOutMenu("out");
 			}
@@ -794,7 +796,6 @@ public class Library {
 			throw new RuntimeException("Please search the books first.");            	
 		}
 		if (bookNumbers == null) {
-			this.println("return to main menu.");
 		}
 		else {
 			for (int bookNumber: bookNumbers) {
@@ -862,7 +863,7 @@ public class Library {
 		while (!valid) {
 			this.println("\nPlease select the book(s) you want to check out according to the results above.");
 			this.println("To select multiple books, please separate each entry with a comma (eg. 1, 2).");
-			this.println("To go back to the main menu, please enter 'r'."); // allow user to return to main menu
+			this.println("To return to the main menu, please enter 'r'."); // allow user to return to main menu
 			int numBooks = books.size();
 			Scanner scanner = new Scanner(System.in);
 			input = scanner.nextLine();
@@ -895,15 +896,19 @@ public class Library {
 		try {
 			int[] inputIntegers = this.parseToInt(input);
 			if (!this.isWithinRange(inputIntegers, numBooks)){
-				throw new RuntimeException("Input includes number not in list.");
+				throw new RuntimeException("You included a book not in the list. Please try again.");
 			}
 			if (this.isRepeatInputs(inputIntegers)){
-				throw new RuntimeException("Input includes repeated integers.");
+				throw new RuntimeException("You can't select the same book twice. Please try again.");
 			}
-			if (this.isFewerThanThreeBooks(inputIntegers)){
+			
+			if (function.equals("out")){
+				if (this.isFewerThanThreeBooks(inputIntegers)){
 
-				throw new RuntimeException("A patron can have no more than 3 books checked out at same time. "
-						+ currentPatron.getName() + " has taken out " + currentPatron.getBooks().size() + " books. ");		
+					throw new RuntimeException("A patron can have no more than 3 books checked out at same time. "
+							+ currentPatron.getName() + " has taken out " + currentPatron.getBooks().size() + " books. ");		
+				}
+				
 			}
 		}
 		catch(NumberFormatException e) {
