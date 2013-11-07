@@ -3,7 +3,7 @@ package library;
 import java.util.ArrayList;
 
 public class Patron {
-	
+
 	String name;
 	Library library;
 	ArrayList<Book> patronBooks;
@@ -18,7 +18,7 @@ public class Patron {
 		this.library = library;
 		this.patronBooks = new ArrayList<Book>();
 	}
-	
+
 	/**
 	 * Returns the name of the patron
 	 * @return name of the patron (String)
@@ -27,31 +27,31 @@ public class Patron {
 		return this.name;
 	}
 
-	/*
+	/**
 	 * Adds this book to the list of books checked out by this Patron
 	 * @param book - book object taken out
 	 */
 	public void take(Book book){
-			patronBooks.add(book);
+		patronBooks.add(book);
 	}
-	
-	/*
+
+	/**
 	 * Removes Book object from the list of books checked out by the patron
 	 * @param book - the book to be returned
 	 */
 	public void giveBack(Book book){
 		patronBooks.remove(book);
 	}
-	
-	/*
+
+	/**
 	 * Returns the list of Book objects checked out to this patron
 	 * return list of books (ArrayList<Book>)
 	 */
 	public ArrayList<Book> getBooks(){
 		return this.patronBooks;
 	}
-	
-	/*
+
+	/**
 	 * Returns name of patron
 	 */
 	@Override
@@ -59,7 +59,7 @@ public class Patron {
 		return getName();
 	}
 
-	/*
+	/**
 	 * For unit tests
 	 */
 	@Override
@@ -88,7 +88,7 @@ public class Patron {
 			return false;
 		return true;
 	}
-	
-	
-	
+
+
+
 }

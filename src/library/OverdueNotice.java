@@ -3,10 +3,10 @@ package library;
 import java.util.ArrayList;
 
 public class OverdueNotice {
-	
+
 	Patron patron;
 	int todaysDate;
-	
+
 	/**
 	 * Constructor for OverdueNotice object for a given patron
 	 */
@@ -14,7 +14,7 @@ public class OverdueNotice {
 		this.patron = patron;
 		this.todaysDate = todaysDate;
 	}
-	
+
 	/**
 	 * If a patron has a overdue checkout book, print out 
 	 * all the books this patron currently have, alone with due date.
@@ -26,18 +26,18 @@ public class OverdueNotice {
 		String notice = "All the books checked out by " + this.patron + " are: \n";
 		int i = 1;
 		for (Book temp: this.patron.getBooks()) {
-			notice = notice + i + ". " + temp + ". \n";
+			notice = notice + i + ". " + temp + ". ";
 			i++;
 			if (temp.getDueDate() <= this.todaysDate) {
 				dueBooks.add(temp);
-				notice = notice + "This book is overdue! " + "Due Date: " + temp.getDueDate() 
-						     + ".\n                      Today's Date: " + (this.todaysDate + 1) + ".\n\n";
+				notice = notice + "\nThis book is overdue! " + "Due Date: " + temp.getDueDate() 
+						+ ".\n                      Today's Date: " + (this.todaysDate + 1) + ".\n\n";
 			}
 			else {
 				notice = notice + "Due Date: " + temp.getDueDate() + ".\n\n";
 			}
 		}
-	    return notice;
+		return notice;
 	}
 
 
@@ -62,6 +62,6 @@ public class OverdueNotice {
 			return false;
 		return true;
 	}
-	
-	
+
+
 }

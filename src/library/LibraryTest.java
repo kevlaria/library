@@ -445,7 +445,7 @@ public class LibraryTest {
 
 	}
 
-	/*
+	/**
 	 * Test method for inputErrorMessage()
 	 */
 	@Test
@@ -453,7 +453,7 @@ public class LibraryTest {
 		assertEquals("'#$' is not a valid input. Please re-enter.", library.inputErrorMessage("#$"));        
 	}
 
-	/*
+	/**
 	 * Test method for bookNumbersToIndex()
 	 */
 	@Test
@@ -465,7 +465,7 @@ public class LibraryTest {
 		assertEquals(0, newintList[2]);        
 	}
 
-	/*
+	/**
 	 * Test method for reverseSortList()
 	 */
 	@Test
@@ -476,7 +476,7 @@ public class LibraryTest {
 		assertEquals(1, library.reverseSortList(intList)[2]);        
 	}
 
-	/*
+	/**
 	 * Test method for checkIn()
 	 */
 	@Test
