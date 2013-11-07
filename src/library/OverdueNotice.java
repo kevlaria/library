@@ -7,7 +7,7 @@ public class OverdueNotice {
 	Patron patron;
 	int todaysDate;
 	
-	/*
+	/**
 	 * Constructor for OverdueNotice object for a given patron
 	 */
 	public OverdueNotice(Patron patron, int todaysDate){
@@ -15,22 +15,33 @@ public class OverdueNotice {
 		this.todaysDate = todaysDate;
 	}
 	
+	/**
+	 * If a patron has a overdue checkout book, print out 
+	 * all the books this patron currently have, alone with due date.
+	 * Call attention to the overdue books.
+	 */
 	@Override
 	public String toString() {
 		ArrayList<Book> dueBooks = new ArrayList<Book>();
 		String notice = "All the books checked out by " + this.patron + " are: \n";
+		int i = 1;
 		for (Book temp: this.patron.getBooks()) {
-			notice = notice + temp + " - Due Date: " + temp.getDueDate() + "\n";
+			notice = notice + i + ". " + temp + ". \n";
+			i++;
 			if (temp.getDueDate() <= this.todaysDate) {
 				dueBooks.add(temp);
-				notice = notice + "This book is overdue!\n";
+				notice = notice + "This book is overdue! " + "Due Date: " + temp.getDueDate() 
+						     + ".\n                      Today's Date: " + (this.todaysDate + 1) + ".\n\n";
+			}
+			else {
+				notice = notice + "Due Date: " + temp.getDueDate() + ".\n\n";
 			}
 		}
 	    return notice;
 	}
 
 
-	/*
+	/**
 	 * For unit tests
 	 */
 	@Override

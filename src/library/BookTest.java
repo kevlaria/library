@@ -1,6 +1,7 @@
 package library;
 
 import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,6 +21,15 @@ public class BookTest {
         equalRites = new Book("Equal Rites", "Terry Pratchett");
     }
 
+    /**
+     * Test method for constructor.
+     */
+    @Test
+    public void testBook() {        
+        assertTrue(contact instanceof Book);
+        assertTrue(equalRites instanceof Book);
+    }
+    
     /**
      * Test method for {@link library.Book#getTitle()}.
      */
