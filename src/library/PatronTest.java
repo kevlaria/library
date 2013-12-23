@@ -1,8 +1,3 @@
-//Taorui Cui, Kevin Lee
-
-/**
- * Tests for Library assignment.
- */
 package library;
 
 import static org.junit.Assert.*;

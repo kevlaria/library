@@ -1,5 +1,3 @@
-//Taorui Cui, Kevin Lee
-
 package library;
 
 public class Calendar {
